@@ -1,0 +1,159 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using ISNPSWeb.Models.Lincense_Group_Oprostnik
+
+@model Upsert_Oprostnik_DTO
+
+@{
+    var cultureCookie = ViewBag.CultureCookie;
+    var lang = Enums.EnUiLanguage.RU;
+    if (cultureCookie =="ru") lang= Enums.EnUiLanguage.RU;
+    else if (cultureCookie =="ro") lang= Enums.EnUiLanguage.RO;
+    else if (cultureCookie =="en") lang= Enums.EnUiLanguage.EN;
+    bool isDisabled = false;
+    if (Model.ErrorCode != EnErrorCode.NoError)
+    {
+        isDisabled = true;
+    }
+}
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+<script src="~/js/Pages/Question/OprostnikInfo.js" asp-append-version="true"></script>
+<form name="addOprostnik" asp-controller="Oprostnik" asp-action="POST_Upsert_Oprostnik" mehod="POST" autocomplete="off">
+   
+    @(Html.DevExtreme().TextBoxFor(m => m.Oid)
+        .LabelMode(EditorLabelMode.Floating)
+        .Label("Oid")
+        .ID("Oid")
+        .Visible(false))
+    <div class="container">
+        <div class="row" style="margin-left:0px">
+
+            <div id="Col_Language_EN_Oprostnik" class="col-auto">
+                <div id="Language_EN_Oprostnik">
+                    @{
+                        var globalLanguage = lang;
+                        ButtonType buttontype;
+                        bool isDisabledbutton = false;
+                        var naem_oprostnik = "";
+                        if (Model.Name != null && Model.Name.ContainsKey(Enums.EnUiLanguage.EN) && Model.Name[Enums.EnUiLanguage.EN] != "")
+                        {
+                            buttontype = ButtonType.Success;
+                            naem_oprostnik = Model.Name[Enums.EnUiLanguage.EN];
+                        }
+                        else
+                        {
+                            buttontype = ButtonType.Normal;
+                        }
+                        if (globalLanguage == Enums.EnUiLanguage.EN) isDisabledbutton = true; 
+                    }
+
+                    @(Html.DevExtreme().Button()
+                        .ID("Language_EN")
+                        .Text("EN")
+                        .Icon("/assets/images/Flag_EN.png")
+                        .Type(buttontype)
+                        .StylingMode(ButtonStylingMode.Contained)
+                        .OnClick("function(e) { onLanguage_Oprostnik(e, \"" + Enums.EnUiLanguage.EN.ToString() + "\", \"" + lang + "\", \"" + naem_oprostnik+ "\"); }")
+                        .Visible(true)
+                        .Disabled(isDisabledbutton)
+                        )
+                </div>
+            </div>
+            <div id="Col_Language_RU_Oprostnik" class="col-auto">
+                <div id="Language_RU_Oprostnik">
+                    @{
+                        isDisabledbutton = false;
+                        naem_oprostnik = "";
+                        if (Model != null && Model.Name != null && Model.Name.ContainsKey(Enums.EnUiLanguage.RU))
+                        {
+                            buttontype = ButtonType.Success;
+                            naem_oprostnik = Model.Name[Enums.EnUiLanguage.RU];
+                        }
+                        else
+                        {
+                            buttontype = ButtonType.Normal;
+                        }
+                        if (globalLanguage == Enums.EnUiLanguage.RU) isDisabledbutton = true;                  
+                    }
+                    @(Html.DevExtreme().Button()
+                        .ID("Language_RU")
+                        .Text("RU")
+                        .Icon("/assets/images/Flag_RU.png")
+                        .Type(buttontype)
+                        .StylingMode(ButtonStylingMode.Contained)
+                        .OnClick("function(e) { onLanguage_Oprostnik(e, \"" + Enums.EnUiLanguage.RU.ToString() + "\", \"" + lang + "\", \"" +  naem_oprostnik+ "\"); }")
+                        .Visible(true)
+                        .Disabled(isDisabledbutton)
+                        )
+                </div>
+            </div>
+            <div id="Col_Language_RO_Oprostnik" class="col-auto">
+                <div id="Language_RO_Oprostnik">
+                    @{
+                        isDisabledbutton = false;
+                        naem_oprostnik = "";
+                        if (Model != null && Model.Name != null && Model.Name.ContainsKey(Enums.EnUiLanguage.RO))
+                        {
+                            naem_oprostnik = Model.Name[Enums.EnUiLanguage.RO];
+                            buttontype = ButtonType.Success;
+                        }
+                        else
+                        {
+                            buttontype = ButtonType.Normal;
+                        }
+                        if (globalLanguage == Enums.EnUiLanguage.RO) isDisabledbutton = true;
+                    }
+                    @(Html.DevExtreme().Button()
+                        .ID("Language_RO")
+                        .Text("RO")
+                        .Icon("/assets/images/Flag_RO.png")
+                        .Type(buttontype)
+                        .StylingMode(ButtonStylingMode.Contained)
+                        .OnClick("function(e) { onLanguage_Oprostnik(e, \"" + Enums.EnUiLanguage.RO.ToString() + "\", \"" + lang + "\", \"" +  naem_oprostnik+ "\"); }")
+                        .Visible(true)
+                        .Disabled(isDisabledbutton)
+                        )
+                </div>
+            </div>           
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div id="Name_Oprostnik">
+                @(Html.DevExtreme().TextBoxFor(m => m.Name[lang])
+                        .LabelMode(EditorLabelMode.Floating)
+                        .Label(Localization.Name_Questionnaire)
+                        .ID("Name")
+                        .Visible(true))
+                </div>
+            </div>
+        </div>
+
+    <div class="modal-footer">
+        @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+        @(Html.DevExtreme().Button().Icon("save").Disabled(isDisabled).Type(ButtonType.Success).Text(Localization.Save).OnClick("function(e) { onSubmitGroupClick(e, \'" + @lang +"\', "+Newtonsoft.Json.JsonConvert.SerializeObject(Model.Name)+"); }"))
+    </div>
+</form>
+
+<div id="Language">
+@(Html.DevExtreme().TextBox()
+    .ID("Language_Question_div")
+    .Name("Language_Question")
+    .InputAttr(new { id = "Language_Question" })
+    .LabelMode(EditorLabelMode.Floating)
+    .Label("Language_Question")
+    .Visible(false)
+    .ReadOnly(false)
+    .Value(lang.ToString()))
+</div>

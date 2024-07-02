@@ -1,0 +1,101 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using ISNPSWeb.Models.Lincense_Group_Oprostnik
+
+@model Upsert_Group_Questionnarei_DTO
+@{
+    IEnumerable<int> Questionnaries;
+    bool isDisabled = false;
+    if (Model.Questionnaries != null)
+    {
+        Questionnaries = Model.Questionnaries.Select(i => int.Parse(i));
+    }
+    else
+    {
+        Questionnaries = null;    
+        isDisabled = true;
+    }
+    IList<Oprostnik_Model> List_id_Questionnaire;
+    if (Model.List_id_Questionnaire ==null)
+    {
+        isDisabled = true;
+        Model.List_id_Questionnaire = new List_Oprostnik_Model();
+        List_id_Questionnaire = Model.List_id_Questionnaire.List_Id_Oprostnik_Model = null;
+    }
+    else
+    {
+        List_id_Questionnaire = Model.List_id_Questionnaire.List_Id_Oprostnik_Model;
+    }
+}
+
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+
+<script src="~/js/Pages/Lincense_Group_Oprostnik/Group/Delet_GroupQuestionnarai.js" asp-append-version="true"></script>
+
+<form name="deletgroup" asp-controller="GroupQuestionnarei_API" asp-action="Delet_Group" mehod="GET" autocomplete="off">
+
+    <div id="Modal_Delet_License">
+        <style asp-append-version="true">
+            h3 {
+                display: inline;
+            }
+        </style>
+        <h3>@Localization.Delet_Group_Questionnaire &nbsp</h3>
+        <h3 style="text-decoration: underline double"> @Model.Name</h3>
+        @(
+            Html.DevExtreme().TextBox()
+            .LabelMode(EditorLabelMode.Floating)
+            .Label(Localization.Name_Group)
+            .Name("Name_Delet_input")
+            .ID("Name_Delet_input")
+            .Visible(true)
+            .ReadOnly(false)
+            .Value("")
+            .Placeholder(Localization.Name_Group_Questionnaire_Delet))
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-12">
+            @(Html.DevExtreme().TextBoxFor(m => m.Name)
+                .LabelMode(EditorLabelMode.Floating)
+                .Label(Localization.Name_Group)
+                .ID("Name")
+                .Visible(true)
+                .ReadOnly(true)
+                )
+        </div>
+        <div class="col-md-12">
+            @(
+                Html.DevExtreme().TagBoxFor(i => i.Questionnaries)
+                .Label(Localization.Questionnaries_list)
+                .DataSource(List_id_Questionnaire)
+                .Value(Questionnaries)
+                .InputAttr("aria-label", "Questionnaries")
+                .Name("questionnaries_delet")
+                .ID("questionnaries_delet")
+                .ValueExpr("Oid")
+                .DisplayExpr("Name")
+                .ReadOnly(true)
+                )
+        </div>
+    </div>
+    <div class="modal-footer">
+        @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+        @(Html.DevExtreme().Button().Icon("trash").Disabled(isDisabled).Type(ButtonType.Danger).Text(Localization.Delet).OnClick("function(e) { onDeleteClick(e, '" + Model.Oid + "') }")
+            )
+    </div>
+    </div>
+</form>
+

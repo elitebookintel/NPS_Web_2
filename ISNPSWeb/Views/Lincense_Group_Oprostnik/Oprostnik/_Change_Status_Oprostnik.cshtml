@@ -1,0 +1,69 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.Get_List_Question
+
+@model List_Question_Get.View_List_Model
+@{
+    bool isDesabled = false;
+    if (Model.ErrorCode != EnErrorCode.NoError)
+    {
+        isDesabled = true;
+    }
+    string LicenseStatus = "";
+    var type_button = ButtonType.Success;
+    string icon = "";
+    if (ViewBag.LicenseStatus =="1")
+    {
+        LicenseStatus = Localization.Activate;
+        icon = "download";
+    }
+    else if (ViewBag.LicenseStatus == "2")
+    {
+        LicenseStatus = Localization.Disable;
+        type_button = ButtonType.Danger;
+        icon = "upload";
+    }
+    else
+    {
+        LicenseStatus = " ";
+        type_button = ButtonType.Danger;
+        icon = "upload";
+    }
+    var flag = ViewBag.Count;
+}
+
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+
+<script src="~/js/Pages/Lincense_Group_Oprostnik/Oprostnik/Change_Status_Oprostnik.js" asp-append-version="true"></script>
+<div id="Modal_Delet_Question">
+    @(Html.DevExtreme().TextBox()
+        .Name("LicenseStatus")
+        .ID("LicenseStatus")
+        .Visible(false)
+        .ReadOnly(false)
+        .Value(ViewBag.LicenseStatus))
+    <style asp-append-version="true">
+        h3 {
+            display: inline;
+        }
+    </style>
+
+    <h3>@Localization.Text_Change_Status_Oprostnik  &nbsp</h3>
+    <h3 id="Change_Status" style="text-decoration: underline double">@ViewBag.Name</h3>
+
+    <div class="modal-footer">
+        @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+        @(Html.DevExtreme().Button().Icon(icon).Disabled(isDesabled).Type(type_button).Text(LicenseStatus).OnClick("function() { onChange_Status(\"" + ViewBag.LicenseStatus + "\", \"" + ViewBag.Id+ "\", \""+ ViewBag.Name + "\",\""+ ViewBag.isEmpty + "\"); }"))
+    </div>
+</div>

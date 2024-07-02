@@ -1,0 +1,121 @@
+﻿
+@using ISNPSWeb.Service;
+@using static Domain.Enums;
+@using Newtonsoft.Json;
+@inject ICurrentUserService currentUserService
+
+@{
+    var lang = currentUserService.EnUiLanguage;
+    var family_name = currentUserService.FullName.Split(" ");
+    var intial = "";
+    foreach (var item in family_name)
+    {
+        intial += item[0];
+    }
+}
+
+
+<script asp-append-version="true">
+    var lang = "@lang";
+    var devexpress_lang;
+    if (lang === "RU") devexpress_lang = "ru";
+    else if (lang === "EN") devexpress_lang = "en";
+    else if (lang === "RO") devexpress_lang = "ro";
+    DevExpress.localization.locale(devexpress_lang);
+
+    function redirectToLockScreen() {     
+        var currentUrl = window.location.href;
+        var cleanUrl = new URL(currentUrl);
+        var baseUrl = cleanUrl.origin + cleanUrl.pathname;
+        if (baseUrl !== null && baseUrl !== undefined && baseUrl !== "") {
+            window.location.href = '/Account/LockScreen/?redirectedFrom=' + encodeURIComponent(baseUrl);
+        } else {
+            window.location.href = '/Account/LockScreen/?redirectedFrom=' + encodeURIComponent("/");
+        }
+    }
+</script>
+<header id="page-topbar">
+    <div class="navbar-header" style="background-color: #fff;">
+        <div class="d-flex flex-logo" style="background-color: #fff; height:70px;">
+            <a href=@Url.Action("Index", "Home") class="logo logo-dark"> 
+            <div class="navbar-brand-box" style="background-color: #fff; height:70px;"></div>
+            </a>
+            <div class='spacer-box-navbar'></div>
+                <input type="text" id="navigations" value="" hidden disabled/>
+            <button type="button" class="btn btn-sm px-2 font-size-16 header-item waves-effect vertical-menu-btn">
+                <i class="fa fa-fw fa-bars text-grey-navbar"></i>
+            </button>
+            <h3 class="topbar_user_company">@currentUserService.Company</h3>
+        </div>
+
+        <div class="row">
+            <div class="col-auto">
+                <div class="dropdown d-inline-block language-switch">
+                    @if (lang == EnUiLanguage.EN)
+                    {
+                        <button type="button" name="langSelector" class="btn header-item waves-effect" data-lang="en"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="~/assets/images/flags/us.jpg" alt="Header Language" height="16" asp-append-version="true" />
+                        </button>
+                    }
+                    else if (lang == EnUiLanguage.RU)
+                    {
+                        <button type="button" name="langSelector" class="btn header-item waves-effect" data-lang="ru"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="~/assets/images/flags/russia.jpg" alt="Header Language" height="16" asp-append-version="true" />
+                        </button>
+                    }
+                    else if (lang == EnUiLanguage.RO)
+                    {
+                        <button type="button" name="langSelector" class="btn header-item waves-effect" data-lang="ro"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="~/assets/images/flags/ro.png" alt="Header Language" height="16" asp-append-version="true" />
+                        </button>
+                    }
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuOffset" style="text-align: left !important;">
+                        <li id="ro" value="ro">
+                            <a href="javascript:void(0);" class="dropdown-item notify-item" onclick="ISNPS.ajaxCultureGET('/Account/ChangeLanguage?shortLang=ro')">
+                                <img src="~/assets/images/flags/ro.png" height="10" width="18" asp-append-version="true" />
+                                <span class="align-middle">Română</span>
+                            </a>
+                        </li>
+                        <li id="ru" value="ru">
+                            <a href="javascript:void(0);" class="dropdown-item notify-item" onclick="ISNPS.ajaxCultureGET('/Account/ChangeLanguage?shortLang=ru')">
+                                <img src="~/assets/images/flags/russia.jpg" height="10" width="18" asp-append-version="true" />
+                                <span class="align-middle">Русский</span>
+                            </a>
+                        </li>
+                        <li id="en" value="en">
+                            <a href="javascript:void(0);" class="dropdown-item notify-item" onclick="ISNPS.ajaxCultureGET('/Account/ChangeLanguage?shortLang=en')">
+                                <img src="~/assets/images/flags/us.jpg" height="10" width="18" asp-append-version="true" />
+                                <span class="align-middle">English</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="d-flex" style="background-color: #fff; height:70px;">
+                    <div class="dropdown d-inline-block">
+                        <button type="button" class="btn header-item waves-effect flex_button" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           @*  <img class="rounded-circle header-profile-user" id="photoUser" src="data:image/png;base64,@image" asp-append-version="true" alt="Header Avatar" /> *@
+                            <div class="circle-container">
+                                <div class="text-inside">@intial</div>
+                            </div>
+                            <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15 text-grey-navbar" id="userFullName">@currentUserService.FullName</span>
+                            <i class="uil-angle-down d-none d-xl-inline-block font-size-15 text-grey-navbar"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end" style="z-index:1070">
+                            <!-- item-->
+                            <a class="dropdown-item d-block" href="@Url.Action("Index", "ProfileInfo")"><i class="uil uil-cog font-size-18 align-middle me-1 text-muted"></i> <span class="align-middle">@Localization.Settings</span></a>
+                            <a class="dropdown-item" onclick="redirectToLockScreen()" href="#"><i class="uil uil-lock-alt font-size-18 align-middle me-1 text-muted"></i> <span class="align-middle">@Localization.LockScreen</span></a>
+                            <a class="dropdown-item" href="@Url.Action("Logout", "Account")"><i class="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i> <span class="align-middle">@Localization.SignOut</span></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>   
+    </div>
+</header>

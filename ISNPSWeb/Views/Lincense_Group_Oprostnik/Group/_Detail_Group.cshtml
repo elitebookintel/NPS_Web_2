@@ -1,0 +1,68 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using ISNPSWeb.Models.Lincense_Group_Oprostnik
+@using ISNPSWeb.Models
+
+@model Upsert_Group_Questionnarei_DTO
+
+@{
+    IEnumerable<int> Questionnaries;
+    if (Model.Questionnaries != null)
+    {
+        Questionnaries = Model.Questionnaries.Select(i => int.Parse(i));
+    }
+    else
+    {
+        Questionnaries = null;
+    }
+    IList<Oprostnik_Model> List_id_Questionnaire;
+    if (Model.List_id_Questionnaire ==null)
+    {
+        Model.List_id_Questionnaire = new List_Oprostnik_Model();
+        List_id_Questionnaire = Model.List_id_Questionnaire.List_Id_Oprostnik_Model = null;
+    }
+    else
+    {
+        List_id_Questionnaire = Model.List_id_Questionnaire.List_Id_Oprostnik_Model;
+    }
+}
+
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+
+<div class="row">
+    @(Html.DevExtreme().TextBoxFor(m => m.Name)
+        .LabelMode(EditorLabelMode.Floating)
+        .Label(Localization.Name_Group)
+        .ID("Name")
+        .Visible(true)
+        .ReadOnly(true)
+        )
+    @(
+        Html.DevExtreme().TagBoxFor(i => i.Questionnaries)
+        .Label(Localization.Questionnaries_list)
+        .DataSource(List_id_Questionnaire)
+        .Value(Questionnaries)
+        .InputAttr("aria-label", "Questionnaries")
+        .Name("questionnaries_info")
+        .ID("questionnaries_info")
+        .ValueExpr("Oid")
+        .DisplayExpr("Name")
+        .ReadOnly(true)
+        )
+</div>
+
+<div class="modal-footer">
+    @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+</div>
+

@@ -1,0 +1,543 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Activate" xml:space="preserve">
+    <value>Activați</value>
+  </data>
+  <data name="ActivationCode" xml:space="preserve">
+    <value>Cod de activare a licenței</value>
+  </data>
+  <data name="Add_Answer" xml:space="preserve">
+    <value>Adăugați o opțiune de răspuns</value>
+  </data>
+  <data name="Add_GroupQuestion" xml:space="preserve">
+    <value>Adăugați un chestionar</value>
+  </data>
+  <data name="Add_Group_Questionnaire" xml:space="preserve">
+    <value>Adăugați un grup de chestionare</value>
+  </data>
+  <data name="Add_Lincense" xml:space="preserve">
+    <value>Generați licențe</value>
+  </data>
+  <data name="Add_Question" xml:space="preserve">
+    <value>Adăugați o întrebare</value>
+  </data>
+  <data name="Answert_Response" xml:space="preserve">
+    <value>Posibil răspuns</value>
+  </data>
+  <data name="Apply_data_Statistica" xml:space="preserve">
+    <value>Aplicați datele</value>
+  </data>
+  <data name="Authorization" xml:space="preserve">
+    <value>Autorizare</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Schimbaţi parola</value>
+  </data>
+  <data name="Change_status" xml:space="preserve">
+    <value>Schimba starea</value>
+  </data>
+  <data name="Comentary" xml:space="preserve">
+    <value>Comentariu</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmă parola</value>
+  </data>
+  <data name="CreateDate" xml:space="preserve">
+    <value>Data creării</value>
+  </data>
+  <data name="Delet" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
+  <data name="Deletion_Сonfirmation" xml:space="preserve">
+    <value>Introduceți textul întrebării de mai sus pentru a confirma ștergerea</value>
+  </data>
+  <data name="Delet_Group_Questionnaire" xml:space="preserve">
+    <value>Sigur doriți să ștergeți grupul:</value>
+  </data>
+  <data name="Delet_Questionnaire" xml:space="preserve">
+    <value>Sigur doriți să ștergeți sondajul:</value>
+  </data>
+  <data name="Device_Name" xml:space="preserve">
+    <value>Nume dispozitiv</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Dezactivați</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editați</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Profilul</value>
+  </data>
+  <data name="Enter_Question" xml:space="preserve">
+    <value>Introduceți întrebarea dvs...</value>
+  </data>
+  <data name="Enter_Сomment" xml:space="preserve">
+    <value>Introduceți un comentariu pentru întrebare...</value>
+  </data>
+  <data name="Field_not_empty" xml:space="preserve">
+    <value>Acest câmp nu trebuie să fie gol</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Numele</value>
+  </data>
+  <data name="Forgot_password" xml:space="preserve">
+    <value>Ai uitat parola?</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Numele complet</value>
+  </data>
+  <data name="Further" xml:space="preserve">
+    <value>Mai departe</value>
+  </data>
+  <data name="GradingType" xml:space="preserve">
+    <value>Tip de întrebare</value>
+  </data>
+  <data name="GroupQuestionnarie_ID" xml:space="preserve">
+    <value>ID grup chestionar</value>
+  </data>
+  <data name="Group_Questionnaire" xml:space="preserve">
+    <value>Grup de chestionare</value>
+  </data>
+  <data name="Label_Change_Status" xml:space="preserve">
+    <value>Introduceți Oid-ul licenței de mai sus</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Prenumele</value>
+  </data>
+  <data name="License" xml:space="preserve">
+    <value>Licență</value>
+  </data>
+  <data name="LincenseActivated" xml:space="preserve">
+    <value>Data activarii</value>
+  </data>
+  <data name="List_Answer" xml:space="preserve">
+    <value>Lista de opțiuni de răspuns</value>
+  </data>
+  <data name="LockScreen" xml:space="preserve">
+    <value>Ecran de blocare</value>
+  </data>
+  <data name="MultipleAnswerVariant" xml:space="preserve">
+    <value>Varianta cu răspunsuri multiple</value>
+  </data>
+  <data name="Name_Group" xml:space="preserve">
+    <value>Numele grupului</value>
+  </data>
+  <data name="Name_Group_Questionnaire_Delet" xml:space="preserve">
+    <value>Introduceți numele complet al grupului de sondaj</value>
+  </data>
+  <data name="Name_Lincense" xml:space="preserve">
+    <value>Numele licenței</value>
+  </data>
+  <data name="Name_Questionnaire" xml:space="preserve">
+    <value>Numele chestionar</value>
+  </data>
+  <data name="Name_Questionnaire_Delet" xml:space="preserve">
+    <value>Introduceți numele complet al chestionarului</value>
+  </data>
+  <data name="New" xml:space="preserve">
+    <value>Nou</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Parolă nouă</value>
+  </data>
+  <data name="NotActivated" xml:space="preserve">
+    <value>Neactivat</value>
+  </data>
+  <data name="Oid_Grup_Questionnaire" xml:space="preserve">
+    <value>Chestionar grup oid</value>
+  </data>
+  <data name="Oid_Lincense" xml:space="preserve">
+    <value>Introduceți licența Oid</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Parola veche</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="Password_recovery" xml:space="preserve">
+    <value>Recuperare parola</value>
+  </data>
+  <data name="PhoneNumber" xml:space="preserve">
+    <value>Număr de telefon</value>
+  </data>
+  <data name="Point10Score" xml:space="preserve">
+    <value>Sistem de evaluare cu 10 puncte</value>
+  </data>
+  <data name="Point5Score" xml:space="preserve">
+    <value>Sistem de evaluare în 5 puncte</value>
+  </data>
+  <data name="Quantity_Lincense" xml:space="preserve">
+    <value>Numărul de licențe</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Întrebare</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Chestionar</value>
+  </data>
+  <data name="Questionnaries_list" xml:space="preserve">
+    <value>Lista chestionarelor</value>
+  </data>
+  <data name="Question_Delet" xml:space="preserve">
+    <value>Numele întrebării de șters</value>
+  </data>
+  <data name="Question_Missing_Lang" xml:space="preserve">
+    <value>Întrebarea nu a fost creată în limba actuală</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Actualizați</value>
+  </data>
+  <data name="ReleaseLicense" xml:space="preserve">
+    <value>Eliberarea licenței</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Salvați</value>
+  </data>
+  <data name="Select_Questionnaires" xml:space="preserve">
+    <value>Selectați chestionare</value>
+  </data>
+  <data name="SingleAnswerVariant" xml:space="preserve">
+    <value>Varianta cu un singur răspuns</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistici</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Text_Change_Status_Lincense" xml:space="preserve">
+    <value>Modificați starea licenței:</value>
+  </data>
+  <data name="Text_Change_Status_Oprostnik" xml:space="preserve">
+    <value>Sigur doriți să schimbați starea sondajului:</value>
+  </data>
+  <data name="Text_Delet_License" xml:space="preserve">
+    <value>Sigur doriți să eliminați licența:</value>
+  </data>
+  <data name="Text_Question_Delet" xml:space="preserve">
+    <value>Chiar doriți să ștergeți următoarea întrebare:</value>
+  </data>
+  <data name="Text_Statistica_Data" xml:space="preserve">
+    <value>Completați formularul pentru a determina pentru ce perioadă aveți nevoie de statistici</value>
+  </data>
+  <data name="Text_Statistica_Question" xml:space="preserve">
+    <value>Statistici pentru întrebare:</value>
+  </data>
+  <data name="Total_number_responses" xml:space="preserve">
+    <value>Numărul total de răspunsuri </value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Deblocați</value>
+  </data>
+  <data name="UpdateDate" xml:space="preserve">
+    <value>Actualizare data</value>
+  </data>
+  <data name="Value_not_match" xml:space="preserve">
+    <value>Valoarea nu se potrivește</value>
+  </data>
+  <data name="YesNo" xml:space="preserve">
+    <value>Da/Nu</value>
+  </data>
+  <data name="Activated" xml:space="preserve">
+    <value>Activată</value>
+  </data>
+  <data name="Deactivated" xml:space="preserve">
+    <value>Dezactivat</value>
+  </data>
+  <data name="UserNotFoundOrIncorrenctEmailValidation" xml:space="preserve">
+    <value>Numele de utilizator nu a fost găsit sau adresa de e-mail este incorectă</value>
+  </data>
+  <data name="ContactAdministrator" xml:space="preserve">
+    <value>Contactați administratorul</value>
+  </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Resetează parola</value>
+  </data>
+  <data name="ResetPasswordHeader" xml:space="preserve">
+    <value>Vă rugăm să introduceți adresa de e-mail folosită pentru înregistrare.</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Poșta electronică</value>
+  </data>
+  <data name="AllRightsReserved" xml:space="preserve">
+    <value>Toate drepturile rezervate.</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Setări</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Deconectare</value>
+  </data>
+  <data name="Saved" xml:space="preserve">
+    <value>Salvat</value>
+  </data>
+  <data name="Release_button" xml:space="preserve">
+    <value>Eliberarea licenței</value>
+  </data>
+  <data name="SearchPanel" xml:space="preserve">
+    <value>Panoul de căutare</value>
+  </data>
+  <data name="New_Password_not_emty" xml:space="preserve">
+    <value>Noua parolă nu trebuie să fie goală</value>
+  </data>
+  <data name="Minimum_password_length" xml:space="preserve">
+    <value>Lungimea minimă a parolei - 8 caractere</value>
+  </data>
+  <data name="Password_letters_numbers_capitalletter" xml:space="preserve">
+    <value>Parola trebuie să conțină atât litere, cifre, cât și cel puțin o literă mare și un simbol</value>
+  </data>
+  <data name="Old_password_not_empty" xml:space="preserve">
+    <value>Vechea parolă nu trebuie să fie goală</value>
+  </data>
+  <data name="Confirm_password_not match" xml:space="preserve">
+    <value>Confirmați parola nu se potrivește cu noua parolă</value>
+  </data>
+  <data name="Cannot_empty" xml:space="preserve">
+    <value>Nu poate fi gol.</value>
+  </data>
+  <data name="Invalid_old_password" xml:space="preserve">
+    <value>Parolă veche nevalidă</value>
+  </data>
+  <data name="LockScreenFooter" xml:space="preserve">
+    <value>Nu tu? Reveniți la pagină</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Conectare</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Numele</value>
+  </data>
+  <data name="Enter_password_unlock_screen" xml:space="preserve">
+    <value>Introduceți parola pentru a vă debloca ecranul!</value>
+  </data>
+  <data name="Licenses_created" xml:space="preserve">
+    <value>Licențe create cu succes</value>
+  </data>
+  <data name="License_removed" xml:space="preserve">
+    <value>Licența eliminată</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Cu succes</value>
+  </data>
+  <data name="Reset_Password" xml:space="preserve">
+    <value>Resetare parola</value>
+  </data>
+  <data name="Lincense" xml:space="preserve">
+    <value>Licențelor</value>
+  </data>
+  <data name="Internal_error" xml:space="preserve">
+    <value>Eroare internă la _</value>
+  </data>
+  <data name="Exception_Lincense" xml:space="preserve">
+    <value>licență</value>
+  </data>
+  <data name="Exception_GroupQuestionnarei" xml:space="preserve">
+    <value>grup de sondajului</value>
+  </data>
+  <data name="ProfileInfo" xml:space="preserve">
+    <value>profilului utilizatorului</value>
+  </data>
+  <data name="Exception_Question" xml:space="preserve">
+    <value>întrebărilor</value>
+  </data>
+  <data name="Access_denied" xml:space="preserve">
+    <value>Credențiale invalide</value>
+  </data>
+  <data name="Invalid_token" xml:space="preserve">
+    <value>Tokenu invalide la _</value>
+  </data>
+  <data name="Unknown" xml:space="preserve">
+    <value>Eroare necunoscută</value>
+  </data>
+  <data name="Declined" xml:space="preserve">
+    <value>Cerere de _ respinsă</value>
+  </data>
+  <data name="Approved" xml:space="preserve">
+    <value>Cerere aprobată</value>
+  </data>
+  <data name="Waiting" xml:space="preserve">
+    <value>Așteptare răspuns _</value>
+  </data>
+  <data name="Failed" xml:space="preserve">
+    <value>Operația de _ a eșuat</value>
+  </data>
+  <data name="Record_not_exist" xml:space="preserve">
+    <value>Intrarea _ nu există</value>
+  </data>
+  <data name="Ok_Lincense" xml:space="preserve">
+    <value>Licența</value>
+  </data>
+  <data name="Ok_POST" xml:space="preserve">
+    <value>adăugat</value>
+  </data>
+  <data name="Ok_Success" xml:space="preserve">
+    <value>cu succes</value>
+  </data>
+  <data name="Ok_PUT" xml:space="preserve">
+    <value>a fost actualizat</value>
+  </data>
+  <data name="Ok_DELETE" xml:space="preserve">
+    <value>a fost șters</value>
+  </data>
+  <data name="Ok_Oprostnik" xml:space="preserve">
+    <value>Chestionarul</value>
+  </data>
+  <data name="Ok_GroupQuestionnarei" xml:space="preserve">
+    <value>Grupul de sondaj</value>
+  </data>
+  <data name="Ok_Question" xml:space="preserve">
+    <value>Întrebarea</value>
+  </data>
+  <data name="Password_changed_successfully" xml:space="preserve">
+    <value>Parola a fost schimbată cu succes</value>
+  </data>
+  <data name="Exception_GET" xml:space="preserve">
+    <value>obținerea datelor de _</value>
+  </data>
+  <data name="Exception_POST" xml:space="preserve">
+    <value>trimiterea datelor de _</value>
+  </data>
+  <data name="Exception_PUT" xml:space="preserve">
+    <value>actualizarea datelor _</value>
+  </data>
+  <data name="Exception_DELETE" xml:space="preserve">
+    <value>ștergerea datelor de _</value>
+  </data>
+  <data name="Exception_Oprostnik" xml:space="preserve">
+    <value>chestionarului</value>
+  </data>
+  <data name="Exception_ProfileInfo" xml:space="preserve">
+    <value>profilului utilizatorului</value>
+  </data>
+  <data name="Success_Post_Error_Get" xml:space="preserve">
+    <value>Întrebarea _ a fost adăugată/actualizată cu succes. Dar au existat erori la afișarea lui.</value>
+  </data>
+  <data name="Failed_load_questionnaire_names" xml:space="preserve">
+    <value>Nu s-au încărcat numele sondajelor.</value>
+  </data>
+</root>

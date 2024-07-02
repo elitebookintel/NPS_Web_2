@@ -1,0 +1,216 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using ISNPSWeb.Models.Lincense_Group_Oprostnik
+
+@model Upsert_Oprostnik_DTO
+
+@{
+    var cultureCookie = ViewBag.CultureCookie;
+    var lang = Enums.EnUiLanguage.RU;
+    if (cultureCookie =="ru") lang= Enums.EnUiLanguage.RU;
+    else if (cultureCookie =="ro") lang= Enums.EnUiLanguage.RO;
+    else if (cultureCookie =="en") lang= Enums.EnUiLanguage.EN;
+    else lang= Enums.EnUiLanguage.RU;
+
+    DateTime? formattedDateTime_UpdateDate;
+    DateTime? formattedDateTime_CreateDate;
+    string status = "";
+
+    if (Model.ErrorCode != EnErrorCode.NoError)
+    {
+        formattedDateTime_UpdateDate = null;
+        formattedDateTime_CreateDate = null;
+    }
+    else
+    {
+        formattedDateTime_UpdateDate = Model.UpdateDate;
+        formattedDateTime_CreateDate = Model.CreateDate;
+        status = (int)Model.Status == 0 ? Localization.New : (int)Model.Status == 1 ? Localization.Activated : (int)Model.Status == 2 ? Localization.Deactivated : "";
+    }
+}
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+<script src="~/js/Pages/Lincense_Group_Oprostnik/Oprostnik/AddOprsotnik.js" asp-append-version="true"></script>
+
+
+@(Html.DevExtreme().TextBoxFor(m => m.Oid)
+        .LabelMode(EditorLabelMode.Floating)
+        .Label("Oid")
+        .ID("Oid")
+        .Visible(false))
+
+<div class="container">
+    <div class="row" style="flex-wrap: nowrap;">
+
+        <div id="Col_Language_EN_Oprostnik" class="col-auto">
+            <div id="Language_EN_Oprostnik">
+                @{
+                    var globalLanguage = lang;
+                    ButtonType buttontype;
+                    bool isDisabledbutton = false;
+                    var naem_oprostnik = "";
+                    if (Model.Name != null && Model.Name.ContainsKey(Enums.EnUiLanguage.EN) && Model.Name[Enums.EnUiLanguage.EN] != null)
+                    {
+                        buttontype = ButtonType.Success;
+                        naem_oprostnik = Model.Name[Enums.EnUiLanguage.EN];
+                    }
+                    else
+                    {
+                        buttontype = ButtonType.Normal;
+                    }
+                    if (globalLanguage == Enums.EnUiLanguage.EN) isDisabledbutton = true;
+                }
+
+                @(Html.DevExtreme().Button()
+                    .ID("Language_EN")
+                    .Text("EN")
+                    .Icon("/assets/images/Flag_EN.png")
+                    .Type(buttontype)
+                    .StylingMode(ButtonStylingMode.Contained)
+                    .OnClick("function(e) { onLanguage_Oprostnik(e, \"" + Enums.EnUiLanguage.EN.ToString() + "\", \"" + lang + "\", \"" + naem_oprostnik+ "\"); }")
+                    .Visible(true)
+                    .Disabled(isDisabledbutton)
+                    )
+            </div>
+        </div>
+        <div id="Col_Language_RU_Oprostnik" class="col-auto">
+            <div id="Language_RU_Oprostnik">
+                @{
+                    isDisabledbutton = false;
+                    naem_oprostnik = "";
+                    if (Model != null && Model.Name != null && Model.Name.ContainsKey(Enums.EnUiLanguage.RU) && Model.Name[Enums.EnUiLanguage.RU] != null)
+                    {
+                        buttontype = ButtonType.Success;
+                        naem_oprostnik = Model.Name[Enums.EnUiLanguage.RU];
+                    }
+                    else
+                    {
+                        buttontype = ButtonType.Normal;
+                    }
+                    if (globalLanguage == Enums.EnUiLanguage.RU) isDisabledbutton = true;
+                }
+                @(Html.DevExtreme().Button()
+                    .ID("Language_RU")
+                    .Text("RU")
+                    .Icon("/assets/images/Flag_RU.png")
+                    .Type(buttontype)
+                    .StylingMode(ButtonStylingMode.Contained)
+                    .OnClick("function(e) { onLanguage_Oprostnik(e, \"" + Enums.EnUiLanguage.RU.ToString() + "\", \"" + lang + "\", \"" +  naem_oprostnik+ "\"); }")
+                    .Visible(true)
+                    .Disabled(isDisabledbutton)
+                    )
+            </div>
+        </div>
+        <div id="Col_Language_RO_Oprostnik" class="col-auto">
+            <div id="Language_RO_Oprostnik">
+                @{
+                    isDisabledbutton = false;
+                    naem_oprostnik = "";
+                    if (Model != null && Model.Name != null && Model.Name.ContainsKey(Enums.EnUiLanguage.RO)&& Model.Name[Enums.EnUiLanguage.RO] != null)
+                    {
+                        naem_oprostnik = Model.Name[Enums.EnUiLanguage.RO];
+                        buttontype = ButtonType.Success;
+                    }
+                    else
+                    {
+                        buttontype = ButtonType.Normal;
+                    }
+                    if (globalLanguage == Enums.EnUiLanguage.RO) isDisabledbutton = true;
+                }
+                @(Html.DevExtreme().Button()
+                    .ID("Language_RO")
+                    .Text("RO")
+                    .Icon("/assets/images/Flag_RO.png")
+                    .Type(buttontype)
+                    .StylingMode(ButtonStylingMode.Contained)
+                    .OnClick("function(e) { onLanguage_Oprostnik(e, \"" + Enums.EnUiLanguage.RO.ToString() + "\", \"" + lang + "\", \"" +  naem_oprostnik+ "\"); }")
+                    .Visible(true)
+                    .Disabled(isDisabledbutton)
+                    )
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="Name_Oprostnik">
+            @if (Model != null && Model.Name != null && Model.Name.ContainsKey(lang))
+            {
+                naem_oprostnik = Model.Name[lang];
+            }
+            else naem_oprostnik = "";
+            @(
+                Html.DevExtreme().TextBox()
+                .LabelMode(EditorLabelMode.Floating)
+                .Label(Localization.Name_Questionnaire)
+                .ID("Name")
+                .Visible(true)
+                .ReadOnly(true)
+                .Value(naem_oprostnik)
+                )
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        @(
+            Html.DevExtreme().TextBoxFor(m => m.Status)
+            .LabelMode(EditorLabelMode.Floating)
+            .Label(Localization.Status)
+            .Visible(true)
+            .ReadOnly(true)
+            .Value(status))
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        @(Html.DevExtreme().DateBox()
+            .InputAttr("aria-label", "Date And Time")
+            .Type(DateBoxType.DateTime)
+            .Value(formattedDateTime_CreateDate)
+            .Label(Localization.CreateDate)
+            .ID("CreateDate")
+            .Visible(true)
+            .ReadOnly(true))
+    </div>
+    <div class="col-md-6">
+        @(Html.DevExtreme().DateBox()
+            .InputAttr("aria-label", "Date And Time")
+            .Type(DateBoxType.DateTime)
+            .Value(formattedDateTime_UpdateDate)
+            .Label(Localization.UpdateDate)
+            .ID("UpdateDate")
+            .Visible(true)
+            .ReadOnly(true))
+    </div>
+</div>
+
+
+<div class="modal-footer">
+    @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+</div>
+
+<div id="Language">
+    @(Html.DevExtreme().TextBox()
+        .ID("Language_Question_div")
+        .Name("Language_Question")
+        .InputAttr(new { id = "Language_Question" })
+        .LabelMode(EditorLabelMode.Floating)
+        .Label("Language_Question")
+        .Visible(false)
+        .ReadOnly(false)
+        .Value(lang.ToString()))
+</div>

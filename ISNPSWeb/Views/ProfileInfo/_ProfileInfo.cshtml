@@ -1,0 +1,36 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.GetProfileInfo
+
+@model ProfileInfo_Get.View_Model;
+@{
+    ViewData["Title"] = "ProfileInfo";
+}
+<script asp-append-version="true">
+    const errorCode = "@Model.ErrorCode";
+    const errorMessage = "@Model.ErrorMessage";
+
+    if (errorCode !== "NoError") {
+        ShowToast('warning', errorMessage);
+    }
+</script>
+<form name="ProfileInfo" autocomplete="off">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="col-md-12">
+                @(Html.DevExtreme().TextBoxFor(m => m.User.FirstName).LabelMode(EditorLabelMode.Floating).ID("FirstName").Label(Localization.FirstName).ReadOnly(true))
+            </div>
+            <div class="col-md-12">
+                @(Html.DevExtreme().TextBoxFor(m => m.User.Email).LabelMode(EditorLabelMode.Floating).Label("Email").ReadOnly(true).Label(Localization.Email))
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12">
+                @(Html.DevExtreme().TextBoxFor(m => m.User.LastName).LabelMode(EditorLabelMode.Floating).ID("LastName").Label(Localization.LastName).ReadOnly(true))
+            </div>
+            <div class="col-md-12">
+                @(Html.DevExtreme().TextBoxFor(m => m.User.PhoneNumber).LabelMode(EditorLabelMode.Floating).ID("PhoneNumber").Label(Localization.PhoneNumber).ReadOnly(true))
+            </div>
+        </div>
+    </div>
+</form>

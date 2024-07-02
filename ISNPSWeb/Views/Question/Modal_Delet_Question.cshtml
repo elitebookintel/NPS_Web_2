@@ -1,0 +1,72 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.Get_Question
+@model Question_Get.View_Model
+
+
+@{
+    bool idDisabled = false;
+    if(Model.ErrorCode != EnErrorCode.NoError)
+    {
+         idDisabled = true;
+    }
+}
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+<script src="~/js/Pages/Question/Delet_Question.js" asp-append-version="true"></script>
+<div id="Modal_Delet_Question">
+
+    <style asp-append-version="true">
+        h3 {
+            display: inline;
+        }
+    </style>
+
+    <h3>@Localization.Delet_Questionnaire &nbsp</h3>
+    <span>
+        <h3 id="delet_Oprostnik" style="text-decoration: underline double">@ViewBag.Name</h3>
+    </span>
+    @(Html.DevExtreme().TextBox()
+        .LabelMode(EditorLabelMode.Floating)
+        .Label(Localization.Question_Delet)
+        .Name("Tittle_Question_Delet")
+        .ID("Tittle_Question_Delet")
+        .Visible(true)
+        .ReadOnly(false)
+        .Value("")
+        .Placeholder(Localization.Deletion_Сonfirmation))
+
+    <div class="modal-footer">
+        @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+        @(Html.DevExtreme().Button().Icon("trash").Disabled(idDisabled).Type(ButtonType.Danger).Text(Localization.Delet).OnClick("function() { onDeletQuestionClick(" + ViewBag.QuestionId + ", \"" + ViewBag.Name + "\"); }"))
+    </div>
+</div>
+<style asp-append-version="true">
+    .flex-container {
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        -ms-box-orient: horizontal;
+        display: -webkit-box;
+        display: -moz-box;
+        display: -ms-flexbox;
+        display: -moz-flex;
+        display: -webkit-flex;
+        display: flex;
+    }
+
+    .wrap {
+        -webkit-flex-wrap: wrap;
+        flex-wrap: wrap;
+    }
+</style>

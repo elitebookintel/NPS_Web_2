@@ -1,0 +1,168 @@
+﻿@using ISNPSWeb.Models;
+@using Domain;
+@model UserClaim;
+
+
+@{
+    ViewData["Title"] = "Lock screen";
+    Layout = "~/Views/_Shared/_BlankLayout.cshtml";
+
+    string password = @Model.Password;
+    //password = new string(password.Select(c => '*').ToArray());
+    
+    var family_name =Model.FullName.Split(" ");
+    var intial = "";
+    foreach (var item in family_name)
+    {
+        intial += item[0];
+    }
+}
+
+
+<script src="~/js/Pages/Account/lockScreen.js" asp-append-version="true"></script>
+
+<link rel="stylesheet" href="~/css/LockScreen.css" asp-append-version="true" />
+
+
+<div class="home-btn d-none d-sm-block text-end" style="right:25px">
+    <a href="@Url.Action("Login", "Account")" class="text-dark"><i class="mdi mdi-home-variant h2"></i></a>
+</div>
+<div class="account-pages" style="margin-top: 4vh !important;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center">
+                    <a href="#" class="d-block auth-logo">
+                        <img src="~/assets/images/intelectsoft/logo/IS-long-green.svg" alt="" height="220" class="logo logo-dark center_logo">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-5">
+                <div class="card" id="card">
+                    <div class="card-body p-4">
+                        <div class="text-center mt-2">
+                            <h5 class="text-success">@Localization.LockScreen</h5>
+                            <p class="text-muted">@Localization.Enter_password_unlock_screen</p>
+                        </div>
+
+                        <div class="p-2 mt-4">
+                            <div class="user-thumb text-center mb-4">
+                                <div class="circle-container">
+                                    <div class="text-inside">@intial</div>
+                                </div>
+                                <h5 class="font-size-15 mt-3">@Model.FullName</h5>
+                            </div>
+                            <form name="lockScreenForm" asp-controller="Account" asp-action="LockScreen" mehod="POST" autocomplete="off">
+                                <div class="col-md-12">
+                                    @(Html.DevExtreme().TextBoxFor(m => m.Email).ID("Email").LabelMode(EditorLabelMode.Floating).Visible(false))
+                                    @(Html.DevExtreme().TextBoxFor(m => m.Id).ID("Id").LabelMode(EditorLabelMode.Floating).Visible(false))
+                                    @(Html.DevExtreme().TextBoxFor(m => m.FullName).ID("FullName").LabelMode(EditorLabelMode.Floating).Visible(false))
+                                    @(Html.DevExtreme().TextBoxFor(m => m.UiLanguage).ID("UiLanguage").LabelMode(EditorLabelMode.Floating).Visible(false))
+                                    @(Html.DevExtreme().TextBoxFor(m => m.Picture).ID("Picture").LabelMode(EditorLabelMode.Floating).Visible(false))
+                                </div>
+
+                                <div class="col-md-12 pt-2">
+                                    @(Html.DevExtreme().TextBox().Value(Model.Password).LabelMode(EditorLabelMode.Static).Label(Localization.Password).OnInput("Password_Input").ID("LockScreen_Input").Name("LockScreen_Input")
+                                        .Buttons(buttons =>
+                                        {
+                                            buttons.Add()
+                                            .Name("passwordBtn")
+                                            .Location(TextEditorButtonLocation.After)
+                                            .Widget(w => w.Button()
+                                            .ID("passwordButton")
+                                            .Type(ButtonType.Normal)
+                                            .StylingMode(ButtonStylingMode.Text)
+                                            .Icon("fa fa-eye")
+                                            .OnClick("changePasswordMode_lockscren"));
+                                        }))
+                                </div>
+
+                                <div class="col-md-12 pt-3">
+                                    <div class="flex-container">
+                                        <div class="">
+                                            <div class="dropdown d-inline-block language-switch">
+                                                @if (ViewBag.Language == "en")
+                                                {
+                                                    <img src="~/assets/images/flags/us.jpg" height="10" width="18" asp-append-version="true" />
+                                                    <button type="button" class="btn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <span class="align-middle">English</span>
+                                                        <i class="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
+                                                    </button>
+                                                }
+                                                else if (ViewBag.Language == "ru")
+                                                {
+                                                    <img src="~/assets/images/flags/russia.jpg" height="10" width="18" asp-append-version="true" />
+                                                    <button type="button" class="btn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <span class="align-middle">Русский</span>
+                                                        <i class="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
+                                                    </button>
+                                                }
+                                                else if (ViewBag.Language == "ro")
+                                                {
+                                                    <img src="~/assets/images/flags/ro.png" height="10" width="18" asp-append-version="true" />
+                                                    <button type="button" class="btn" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <span class="align-middle">Română</span>
+                                                        <i class="uil-angle-down d-none d-xl-inline-block font-size-15"></i>
+                                                    </button>
+                                                }
+
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuOffset" style="text-align: left !important;">
+                                                    <li id="ro" value="ro">
+                                                        <a href="javascript:void(0);" class="dropdown-item notify-item" onclick="ISNPS.ajaxCultureGET('/Account/ChangeLang?shortLang=ro')">
+                                                            <img src="~/assets/images/flags/ro.png" height="10" width="18" asp-append-version="true" />
+                                                            <span class="align-middle">Română</span>
+                                                        </a>
+                                                    </li>
+                                                    <li id="ru" value="ru">
+                                                        <a href="javascript:void(0);" class="dropdown-item notify-item" onclick="ISNPS.ajaxCultureGET('/Account/ChangeLang?shortLang=ru')">
+                                                            <img src="~/assets/images/flags/russia.jpg" height="10" width="18" asp-append-version="true" />
+                                                            <span class="align-middle">Русский</span>
+                                                        </a>
+                                                    </li>
+                                                    <li id="en" value="en">
+                                                        <a href="javascript:void(0);" class="dropdown-item notify-item" onclick="ISNPS.ajaxCultureGET('/Account/ChangeLang?shortLang=en')">
+                                                            <img src="~/assets/images/flags/us.jpg" height="10" width="18" asp-append-version="true" />
+                                                            <span class="align-middle">English</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                        <div class="">
+                                            <a href="/Account/ForgotPassword" class="text-muted"> @Localization.Forgot_password</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 pt-4">
+                                    @(Html.DevExtreme().Button().Icon("lock").Type(ButtonType.Default).Width("100%").Text(Localization.Unlock).OnClick("function(){ Submit_Form(\""+ViewBag.redirectedFrom+"\")}"))
+                                </div>
+                                <div class="mt-4 text-center">
+                                    <p class="mb-0"> @Localization.LockScreenFooter <a href="@Url.Action("Login", "Account")" class="fw-medium text-primary">  @Localization.SignIn </a></p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 text-center">
+                    <p>
+                        ©
+                        <script>document.write(new Date().getFullYear())</script> NPS Portal. @Localization.AllRightsReserved
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- end container -->
+</div>
+
+
+
+   
+

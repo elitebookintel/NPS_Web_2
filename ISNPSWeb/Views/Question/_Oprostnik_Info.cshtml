@@ -1,0 +1,76 @@
+﻿@* @using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using ISNPSWeb.Models.Lincense_Group_Oprostnik
+
+@model Upsert_Oprostnik_DTO
+ *@
+@* @{
+    var cultureCookie = ViewBag.CultureCookie;
+    var lang = Enums.EnUiLanguage.RU;
+    if (cultureCookie =="ru") lang= Enums.EnUiLanguage.RU;
+    else if (cultureCookie =="ro") lang= Enums.EnUiLanguage.RO;
+    else if (cultureCookie =="en") lang= Enums.EnUiLanguage.EN;
+    else lang= Enums.EnUiLanguage.RU;
+
+    string name_Questionnaire = "";
+}
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+<style>
+    .flex-container_2 {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 5%;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+<script src="~/js/Pages/Question/OprostnikInfo.js" asp-append-version="true"></script>
+
+<div class="flex-container_2">
+    <div class="text-center">
+        @if (Model.Name !=null)
+        {
+            @if (Model.Name.ContainsKey(lang))
+            {
+                name_Questionnaire = @Model.Name[lang];
+            }
+            else
+            {
+                foreach (var item in Model.Name)
+                {
+                    if (item.Value!="")
+                    {
+                        name_Questionnaire = item.Value;
+                        break;
+                    }
+                }
+            }
+        }
+        <h3 id="Oprostnik_name_@lang" class="text-decoration-underline">@name_Questionnaire</h3>
+    </div>
+    <div class="text-center">
+        <div id="Button_Edit_Oprostnik">
+            @(Html.DevExtreme().Button()
+                .ID("Edit_Oprostnkik_info")
+                .Text(Localization.Edit)
+                .Icon("edit")
+                .Type(ButtonType.Normal)
+                .StylingMode(ButtonStylingMode.Outlined)
+                .OnClick("function() { editButtonClicked(" + Model.Oid +", \""+name_Questionnaire +"\"); }")
+                )
+        </div>
+    </div>
+</div>
+ *@

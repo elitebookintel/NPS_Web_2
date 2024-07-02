@@ -1,0 +1,58 @@
+﻿body {
+    background: linear-gradient(180deg, #c4e3a0b0 0%, hsla(46, 32%, 92%, 1) 50%, hsla(46, 32%, 92%, 1) 75%, #b0d189b0 100%);
+}
+
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0; 
+    padding: 0; 
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.language-switch-container, .forgot-password-container {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0; 
+}
+
+.language-switch-container {
+    margin-right: auto;
+}
+
+.forgot-password-container a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.language-switch-container, .forgot-password-container {
+    white-space: nowrap; 
+}
+
+
+.circle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    background-color: #B1BDC5;
+}
+
+.text-inside {
+    text-align: center;
+    color: #FCFCFD;
+    font-size: 3em;
+    font-weight: bold;
+    line-height:2.3em
+}
+
+.user-thumb {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

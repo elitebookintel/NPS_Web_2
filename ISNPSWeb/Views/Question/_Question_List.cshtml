@@ -1,0 +1,503 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using ISNPSWeb.Models
+@using Newtonsoft.Json
+@using static Domain.Enums
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model List_QuestionViewModel
+
+@{
+    ViewData["Title"] = "List_Question";
+    int count = 1;
+    int count_answert = 0;
+    int? QuestionnaireId = ViewBag.QuestionnaireId ?? default;
+    int? quantity_element = Model.Questions == null ? null : Model.Questions.Count();
+
+    var cultureCookie = ViewBag.CultureCookie;
+    var lang_cooki = Enums.EnUiLanguage.RU;
+    if (cultureCookie =="ru") lang_cooki= Enums.EnUiLanguage.RU;
+    else if (cultureCookie =="ro") lang_cooki= Enums.EnUiLanguage.RO;
+    else if (cultureCookie =="en") lang_cooki= Enums.EnUiLanguage.EN;
+    else lang_cooki= Enums.EnUiLanguage.RU;
+    string name_Questionnaire = "";
+}
+
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+
+<link rel="stylesheet" href="~/css/Question.css" asp-append-version="true" />
+<script src="~/js/Pages/Question/AddQuestion.js" asp-append-version="true"></script>
+<script src="~/js/Pages/Question/Drag_and_Drop.js" asp-append-version="true"></script>
+<div id="Cookie_lang" hidden>@lang_cooki</div>
+<div id="mainViewUrl" data-id="@ViewBag.Url"></div>
+
+<style>
+    .flex-container_2 {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 5%;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+<script src="~/js/Pages/Question/OprostnikInfo.js" asp-append-version="true"></script>
+
+<div class="flex-container_2">
+    <div class="text-center">
+        @if (Model.Name_Oprostnik !=null)
+        {
+            @if (Model.Name_Oprostnik.ContainsKey(lang_cooki)&& Model.Name_Oprostnik[lang_cooki]!=null)
+            {
+                name_Questionnaire = @Model.Name_Oprostnik[lang_cooki];
+            }
+            else
+            {
+                foreach (var item in Model.Name_Oprostnik)
+                {
+                    if (item.Value!="" && item.Value!=null)
+                    {
+                        name_Questionnaire = item.Value;
+                        break;
+                    }
+                }
+            }
+        }
+        <h3 id="Oprostnik_name_@lang_cooki" class="text-decoration-underline">@name_Questionnaire</h3>
+    </div>
+    <div class="text-center">
+        <div id="Button_Edit_Oprostnik">
+            @(Html.DevExtreme().Button()
+                .ID("Edit_Oprostnkik_info")
+                .Text(Localization.Edit)
+                .Icon("edit")
+                .Type(ButtonType.Normal)
+                .StylingMode(ButtonStylingMode.Outlined)
+                .OnClick("function() { editButtonClicked(" + Model.Oid +", \""+name_Questionnaire +"\"); }")
+                )
+        </div>
+    </div>
+</div>
+
+<div id="Question_List" style="margin-bottom: -15px;">
+    <div id="sticky-container-2" class="AddButonFixed">
+        @(Html.DevExtreme().Button()
+            .ID("AddQuestionButton_clone")
+            .Text(Localization.Add_Question)
+            .Icon("plus")
+            .Type(ButtonType.Success)
+            .StylingMode(ButtonStylingMode.Contained)
+            .OnClick("function() { onAddQuestions(" + QuestionnaireId +", \""+ lang_cooki  + "\"); }")
+            .Visible(false)
+            .Disabled(false)
+            .ElementAttr(new { style = "margin-left:20px" })
+            )
+    </div>
+    <div id="sticky-container" class="AddButonFixed">
+        @(Html.DevExtreme().Button()
+            .ID("AddQuestionButton")
+            .Text(Localization.Add_Question)
+            .Icon("plus")
+            .Type(ButtonType.Success)
+            .StylingMode(ButtonStylingMode.Contained)
+            .OnClick("function() { onAddQuestions(" + ViewBag.QuestionnaireId +", \""+ lang_cooki  + "\"); }")
+            .Visible(true)
+            .Disabled(false)
+            .ElementAttr(new { style = "margin-left:20px" })
+            )
+    </div>
+    <ul class="tasks__list">
+
+        @if (Model != null && Model.Questions!=null)
+        {
+            @foreach (var question in Model.Questions)
+            {
+                <li class="tasks__item" style="background-color: #f9f9f9">
+                    <div id="drag_element" class="containerdrag drag-zone"></div>
+                    <div id="Question_root_@question.Id">
+                        <div id="input_Question_@question.Id">
+                            <div class="flex-container align-items-center">
+                                <div id="Col_Index_Question_value_@question.Id" class="Col_Index_Question item" style="style=" flex-grow: 0">
+                                    <h3 style="white-space: nowrap;" id="Index_Question_value_@question.Id">@Localization.Question @question.Index</h3>
+                                </div>
+                                <div id="Col_Button_Edit_Question_@question.Id" class="Col_Button_Edit_Question" style="flex-grow: 0">
+                                    <div id="Button_Edit_Question_@question.Id">
+                                        @(Html.DevExtreme().Button()
+                                            .ID("Edit_Question_" + question.Id)
+                                            .Icon("edit")
+                                            .Type(ButtonType.Normal)
+                                            .StylingMode(ButtonStylingMode.Contained)
+                                            .OnClick("function() { onEditQuestions(" + question.Id +", " + Newtonsoft.Json.JsonConvert.SerializeObject(question) + "); }")
+                                            .Visible(true)
+                                            .Disabled(false)
+                                            )
+                                    </div>
+                                </div>
+                                <div id="Col_Language_EN_Question_@question.Id" class="Col_Language item">
+                                    <div id="Language_EN_Question_@question.Id">
+                                        @{
+                                            var globalLanguage = lang_cooki;
+                                            ButtonType buttontype;
+                                            bool isDisabledbutton = false;
+                                            if (@question.Question != null && @question.Question.ContainsKey(EnUiLanguage.EN) && @question.Question[EnUiLanguage.EN] != "")
+                                            {
+                                                buttontype = ButtonType.Success;
+                                            }
+                                            else
+                                            {
+                                                buttontype = ButtonType.Normal;
+                                            }
+                                            if (globalLanguage == EnUiLanguage.EN) isDisabledbutton = true;
+                                        }
+                                        @(Html.DevExtreme().Button()
+                                            .ID("Language_EN_" + question.Id)
+                                            .Text("EN")
+                                            .Icon("/assets/images/Flag_EN.png")
+                                            .Type(buttontype)
+                                            .StylingMode(ButtonStylingMode.Contained)
+                                            .OnClick("function(e) { onLanguage_Questions(e, \"" + EnUiLanguage.EN+ "\", \"" +lang_cooki   + "\", " + Newtonsoft.Json.JsonConvert.SerializeObject(question) + "); }")
+                                            .Visible(true)
+                                            .Disabled(isDisabledbutton)
+                                            )
+                                    </div>
+                                </div>
+                                <div id="Col_Language_RU_Question_@question.Id" class="Col_Language item">
+                                    <div id="Language_RU_Question_@question.Id">
+                                        @{
+                                            isDisabledbutton = false;
+                                            if (@question.Question != null && @question.Question.ContainsKey(EnUiLanguage.RU) && @question.Question[EnUiLanguage.RU] != "")
+                                            {
+                                                buttontype = ButtonType.Success;
+                                            }
+                                            else
+                                            {
+                                                buttontype = ButtonType.Normal;
+                                            }
+                                            if (globalLanguage == EnUiLanguage.RU) isDisabledbutton = true;
+                                        }
+                                        @(Html.DevExtreme().Button()
+                                            .ID("Language_RU_" + question.Id)
+                                            .Text("RU")
+                                            .Icon("/assets/images/Flag_RU.png")
+                                            .Type(buttontype)
+                                            .StylingMode(ButtonStylingMode.Contained)
+                                            .OnClick("function(e) { onLanguage_Questions(e, \"" + EnUiLanguage.RU + "\", \"" + lang_cooki + "\", " + Newtonsoft.Json.JsonConvert.SerializeObject(question) + "); }")
+                                            .Visible(true)
+                                            .Disabled(isDisabledbutton)
+                                            )
+                                    </div>
+                                </div>
+                                <div id="Col_Language_RO_Question_@question.Id" class="Col_Language item">
+                                    <div id="Language_RO_Question_@question.Id">
+                                        @{
+                                            isDisabledbutton = false;
+                                            if (@question.Question != null && @question.Question.ContainsKey(EnUiLanguage.RO) && @question.Question[EnUiLanguage.RO] != "")
+                                            {
+                                                buttontype = ButtonType.Success;
+                                            }
+                                            else
+                                            {
+                                                buttontype = ButtonType.Normal;
+                                            }
+                                            if (globalLanguage == EnUiLanguage.RO) isDisabledbutton = true;
+                                        }
+                                        @(Html.DevExtreme().Button()
+                                            .ID("Language_RO_" + question.Id)
+                                            .Text("RO")
+                                            .Icon("/assets/images/Flag_RO.png")
+                                            .Type(buttontype)
+                                            .StylingMode(ButtonStylingMode.Contained)
+                                            .OnClick("function(e) { onLanguage_Questions(e, \"" + EnUiLanguage.RO + "\", \"" +lang_cooki  + "\", " + Newtonsoft.Json.JsonConvert.SerializeObject(question) + "); }")
+                                            .Visible(true)
+                                            .Disabled(isDisabledbutton)
+                                            )
+                                    </div>
+                                </div>
+                                <div class='spacer-box item'></div>
+                                <div id="Col_Button_Statistica_Question_@question.Id" class="Col_Button_Statistica item">
+                                    <div id="Button_Statistica_Question_@question.Id">
+                                        @(Html.DevExtreme().Button()
+                                            .ID("Statistica_" + question.Id)
+                                            .Icon("chart")
+                                            .Text(Localization.Statistics)
+                                            .Type(ButtonType.Normal)
+                                            .StylingMode(ButtonStylingMode.Contained)
+                                            .OnClick("function() { onStatistica_Questions(\"" + question.Id + "\",  \"" + lang_cooki + "\",  \""+@question.GradingType+"\"," + Newtonsoft.Json.JsonConvert.SerializeObject(question.Question) +"); }")
+                                            .Visible(true)
+                                            )
+                                    </div>
+                                </div>
+                                <div class='spacer-box item'></div>
+                                <div id="Col_Button_Delet_Question_@question.Id" class="flex-item Col_Button_Delet item">
+                                    <div id="Button_Delet_Question_@question.Id">
+                                        @(Html.DevExtreme().Button()
+                                            .ID("Delet_Question_" + question.Id)
+                                            .Text(Localization.Delet)
+                                            .Icon("trash")
+                                            .Type(ButtonType.Danger)
+                                            .StylingMode(ButtonStylingMode.Contained)
+                                            .OnClick("function() { onDeletQuestions(\"" + question.Id + "\", \"" + lang_cooki+"\"," + Newtonsoft.Json.JsonConvert.SerializeObject(question.Question) +"); }")
+                                            .Visible(true)
+                                            )
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="Question_@question.Id" class="Question_field">
+                                <div id="Index_Question_@question.Id">
+                                    @(Html.DevExtreme().TextBox()
+                                        .InputAttr(@question.Index)
+                                        .Value(@question.Index.ToString())
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label("Index")
+                                        .Name("Index")
+                                        .ID("Index_"+@question.Id.ToString())
+                                        .Visible(false)
+                                        .ReadOnly(true)
+                                        )
+                                </div>
+                                <div id="QuestionID_@question.Id">
+                                    @(Html.DevExtreme().TextBox()
+                                        .InputAttr(@question.Id)
+                                        .Value(@question.Id.ToString())
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label("Id")
+                                        .Name("Id")
+                                        .ID("Id_"+@question.Id.ToString())
+                                        .Visible(false)
+                                        .ReadOnly(true)
+                                        )
+                                </div>
+                                <div id="QuestionnaireId_@question.QuestionnaireId">
+                                    @(Html.DevExtreme().TextBox()
+                                        .InputAttr(@question.QuestionnaireId)
+                                        .Value(ViewBag.QuestionnaireId.ToString())
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label("QuestionnaireId")
+                                        .Name("QuestionnaireId")
+                                        .ID("QuestionnaireId_"+@question.Id.ToString())
+                                        .Visible(false)
+                                        .ReadOnly(true)
+                                        )
+                                </div>
+                                <div id="CreateData_@question.CreateData">
+                                    @(Html.DevExtreme().TextBox()
+                                        .InputAttr(@question.CreateData)
+                                        .Value(@question.CreateData.ToString())
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label("CreateData")
+                                        .Name("CreateData")
+                                        .ID("CreateData_"+@question.Id.ToString())
+                                        .Visible(false)
+                                        .ReadOnly(true)
+                                        )
+                                </div>
+                                <div id="Language_@question.Id">
+                                    @(Html.DevExtreme().TextBox()
+                                        .InputAttr(@question.CreateData)
+                                        .Value(lang_cooki.ToString())
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label("Language_Question")
+                                        .Name("Language_Question")
+                                        .ID("Language_Question_"+@question.Id.ToString())
+                                        .Visible(false)
+                                        .ReadOnly(true)
+                                        )
+                                </div>
+                                <div id="Tittle_info_@question.Id" class="@Newtonsoft.Json.JsonConvert.SerializeObject(question.Question)"></div>
+                                <div id="Tittle_Question_@question.Id">
+                                    @(Html.DevExtreme().TextBox()
+                                        .InputAttr(@question.Id)
+                                        .Value(@question.Question[lang_cooki])
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label(Localization.Question)
+                                        .Name("Question")
+                                        .ID("Tittle_"+@question.Id.ToString())
+                                        .Visible(true)
+                                        .ReadOnly(true)
+                                        )
+                                </div>
+                                <div id="Comentory_info_@question.Id" class="@Newtonsoft.Json.JsonConvert.SerializeObject(question.Comentary)"></div>
+                                <div id="Comentory_Question_@question.Id">
+                                    @(Html.DevExtreme().TextArea()
+                                        .Value(@question.Comentary[lang_cooki])
+                                        .Height(50)
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label(Localization.Comentary)
+                                        .Name("Comentary")
+                                        .ID("Comentary_" + @question.Id.ToString())
+                                        .Visible(true)
+                                        .ReadOnly(true)
+                                        )
+                                </div>
+                                <div id="Language_@question.Id"></div>
+                                @(Html.DevExtreme().TextBox()
+                                    .Value(EnUiLanguage.RU.ToString())
+                                    .LabelMode(EditorLabelMode.Floating)
+                                    .Label("Language_Question")
+                                    .Name("Language_Question")
+                                    .ID("Language_Question" + @question.Id.ToString())
+                                    .Visible(false)
+                                    .ReadOnly(true)
+                                    )
+
+                                <div id="GradingType_Question_@question.Id">
+                                    @(Html.DevExtreme().TextBox()
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label(Localization.GradingType)
+                                        .Name("GradingType")
+                                        .ID("GradingType_" + @question.Id.ToString())
+                                        .Visible(true)
+                                        .ReadOnly(true)
+                                        .Value((int)@question.GradingType == 1
+                                        ? Localization.YesNo : (int)@question.GradingType == 2
+                                        ? Localization.Point10Score : (int)@question.GradingType == 3
+                                        ? Localization.SingleAnswerVariant : (int)@question.GradingType == 4
+                                        ? Localization.MultipleAnswerVariant : Localization.Point5Score)
+                                        )
+
+                                    @(Html.DevExtreme().TextBox()
+                                        .InputAttr(@question.GradingType)
+                                        .Value(@question.GradingType.ToString())
+                                        .LabelMode(EditorLabelMode.Floating)
+                                        .Label("GradingType_Temp")
+                                        .Name("GradingType_Temp")
+                                        .ID("GradingType_Temp_"+@question.Id.ToString())
+                                        .Visible(false)
+                                        .ReadOnly(true)
+                                        )
+                                    @(Html.DevExtreme().SelectBox()
+                                        .Name("GradingType_input")
+                                        .InputAttr("aria-label", "GradingType_Question_@question.GradingType")
+                                        .ID("Select_GradingType_" + @question.Id.ToString())
+                                        .DataSource(new[] {
+                            new { Id = 1, Name = "YesNo" },
+                            new { Id = 2, Name = "Point10Score" },
+                            new { Id = 3, Name = "SingleAnswerVariant" },
+                            new { Id = 4, Name = "MultipleAnswerVariant" },
+                            new { Id = 5, Name = "Point5Score" }
+                            })
+                                        .Visible(false)
+                                        )
+
+                                </div>
+
+                                @if ((int)question.GradingType == 3 || (int)question.GradingType == 4)
+                                {
+                                    <h3>@Localization.List_Answer </h3>
+                                    <div id="ButtonAdd_Answert_Question_@question.Id" style="display: none;">
+                                        @(Html.DevExtreme().Button()
+                                            .ID("AddQuestion" + question.Id)
+                                            .Text(Localization.Add_Answer)
+                                            .Icon("plus")
+                                            .Type(ButtonType.Normal)
+                                            .StylingMode(ButtonStylingMode.Outlined)
+                                            .OnClick("function() { onAdd_Answert_Handler(" + question.Id + "); }")
+                                            .Visible(true)
+                                            .ElementAttr(new { style = "background-color: #f9f9f9" })
+                                            )
+                                    </div>
+                                    if (question.ResponseVariants != null || question.ResponseVariants.Count() != 0)
+                                    {
+                                        <div id="List_Answert_@question.Id">
+                                            @foreach (var answert in question.ResponseVariants)
+                                            {
+
+                                                <div id="Answert_@answert.Id @question.Id">
+                                                    @(Html.DevExtreme().TextBoxFor(i => @answert.Id)
+                                                        .InputAttr(@answert.Id)
+                                                        .Value(@answert.Id.ToString())
+                                                        .LabelMode(EditorLabelMode.Floating)
+                                                        .Label("Answert_Id")
+                                                        .Name("Answert_Id")
+                                                        .ID("Answert_Id_"+@question.Id.ToString()+"_"+@answert.Id.ToString())
+                                                        .Visible(false)
+                                                        .ReadOnly(true)
+                                                        )
+                                                    @(Html.DevExtreme().TextBoxFor(i => @answert.QuestionId)
+                                                        .InputAttr(@answert.QuestionId)
+                                                        .Value(@answert.QuestionId.ToString())
+                                                        .LabelMode(EditorLabelMode.Floating)
+                                                        .Label("QuestionId")
+                                                        .Name("QuestionId")
+                                                        .ID("QuestionId_"+@question.Id.ToString()+"_"+@answert.Id.ToString())
+                                                        .Visible(false)
+                                                        .ReadOnly(true)
+                                                        )
+                                                    @{
+                                                        if (@answert.Response.ContainsKey(lang_cooki) && @answert.Response[lang_cooki] != "")
+                                                        {
+                                                            @(Html.DevExtreme().TextBoxFor(i => @answert.Response)
+                                                            .InputAttr(@answert.Id)
+                                                            .Value(@answert.Response[lang_cooki])
+                                                            .LabelMode(EditorLabelMode.Floating)
+                                                            .Label(Localization.Answert_Response)
+                                                            .Name("Answert_Response_" + @answert.Id)
+                                                            .ID("Answert_Response_" + @question.Id.ToString() + "_" + @answert.Id.ToString())
+                                                            .Visible(true)
+                                                            .ReadOnly(true)
+                                                                )
+                                                        }
+                                                        else
+                                                        {
+                                                            @(Html.DevExtreme().TextBoxFor(i => @answert.Response)
+                                                            .InputAttr(@answert.Id)
+                                                            .Value("")
+                                                            .LabelMode(EditorLabelMode.Floating)
+                                                            .Label(Localization.Answert_Response)
+                                                            .Name("Answert_Response_" + @answert.Id)
+                                                            .ID("Answert_Response_" + @question.Id.ToString() + "_" + @answert.Id.ToString())
+                                                            .Visible(true)
+                                                            .ReadOnly(true)
+                                                                )
+                                                        }
+                                                    }
+                                                </div>
+                                                count_answert++;
+                                            }
+                                        </div>
+                                        <div class="named-container_@question.Id">
+                                            <div class="row" style="margin-top:''; margin-right:''; margin-left: 0rem; --bs-gutter-x:''">
+                                                <div class="col-10">
+                                                    <div id="input_Answert_@question.Id"></div>
+                                                </div>
+                                                <div class="col-2" style="top:6px">
+                                                    <div id="button_input_Answert_@question.Id"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div id="footer_button_@question.Id" class="modal-footer" hidden>
+                                @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("function() { onEscEditClick(" + question.Id+", \""+ lang_cooki +"\"); }"))
+                                @(Html.DevExtreme().Button().Icon("save")
+                                    .Type(ButtonType.Success)
+                                    .Text(Localization.Save)
+                                    .OnClick("function() { onEditQuestionClick(" + question.Id + ", " + Newtonsoft.Json.JsonConvert.SerializeObject(question) +", \""+ lang_cooki +"\"); }"))
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </li>
+                count++;
+            }
+            <div id="AddQuestion"></div>
+        }
+    </ul>
+
+</div>

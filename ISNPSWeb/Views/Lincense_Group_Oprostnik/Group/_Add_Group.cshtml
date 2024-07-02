@@ -1,0 +1,127 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using ISNPSWeb.Models.Lincense_Group_Oprostnik
+
+@model Upsert_Group_Questionnarei_DTO
+
+@{
+    bool isDisabled = false;
+    if (Model.ErrorCode!=EnErrorCode.NoError)
+    {
+        isDisabled = true;
+    }
+    string Questionnaries_List = "";
+    if (Model.Questionnaries != null)
+    {
+      Questionnaries_List = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Questionnaries.Select(i => int.Parse(i.ToString())));
+    }
+}
+
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+            if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+
+<script src="~/js/Pages/Lincense_Group_Oprostnik/Group/AddGroupQuestionnarei.js" asp-append-version="true"></script>
+<form name="addGroup" asp-controller="GroupQuestionnarei" asp-action="POST_Upsert_Group" mehod="POST" autocomplete="off">
+    <div id="oprostnik_list" hidden>@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Questionnaires_List)</div>
+    @(Html.DevExtreme().TextBoxFor(m => m.Oid)
+        .LabelMode(EditorLabelMode.Floating)
+        .Label("Oid")
+        .ID("Oid")
+        .Visible(false))
+    <div class="row">
+        <div class="col-md-12">
+            @(Html.DevExtreme().TextBoxFor(m => m.Name)
+                .LabelMode(EditorLabelMode.Floating)
+                .Label(Localization.Name_Group)
+                .ID("Name")
+                .Value(Model.Name ?? default)
+                .Visible(true))
+        </div>
+
+        <div class="col-md-12">
+            @if (Model != null && Model.Oid != 0)
+            {         
+                <div id="div_Questionnaries" hidden> @Newtonsoft.Json.JsonConvert.SerializeObject(Model.Questionnaries.Select(i => int.Parse(i))) </div>
+
+@*                 @(Html.DevExtreme().TagBox()
+                    .Label(Localization.Select_Questionnaires)
+                    .DataSource(d => d.Mvc().Controller("GroupQuestionnarei_API").LoadAction("Oprostnik_Id_List").Key("Oid"))
+                    .Value(Model.Questionnaries.Select(i => int.Parse(i)))
+                    .InputAttr("aria-label", "Questionnaries")
+                    .OnCustomItemCreating("customItem_creating")
+                    .Name("Questionnaries")
+                    .ID("Questionnaries")
+                    .Visible(false)
+                    .ValueExpr("Oid")
+                    .DisplayExpr("Name")) *@
+
+                 <div id="UserTable"></div>
+
+                @(Html.DevExtreme().TagBox()
+                    .Label(Localization.Select_Questionnaires)
+                    .Value(Model.Questionnaries ?? default)
+                    .InputAttr("aria-label", "DeleteQuestionnaries")
+                    .Name("DeleteQuestionnaries")
+                    .ID("DeleteQuestionnaries")
+                    // .DataSource(new JS("ISNPS.load_dataSource('/GroupQuestionnarei_API/Oprostnik_Id_List','DeleteQuestionnaries','TagBox')"))
+                    .DataSource(d => d.Mvc().Controller("GroupQuestionnarei_API").LoadAction("Oprostnik_Id_List").Key("Oid"))
+                    // .DataSource(Model.List_Id_Oprostnik_Model)
+                    .ValueExpr("Oid")
+                    .DisplayExpr("Name")
+                    .ShowSelectionControls(true)
+                    .HideSelectedItems(true)
+                    .ApplyValueMode(EditorApplyValueMode.Instantly)
+                    .OnValueChanged("onTagBoxValueChanged")
+                    .ShowClearButton(true)
+                    )
+            }
+            else
+            {
+                @(Html.DevExtreme().TagBox()
+                    .Label(Localization.Select_Questionnaires)
+                    .Value(Model.Questionnaries ?? default)
+                    .InputAttr("aria-label", "Questionnaries")
+                    .Name("Questionnaries")
+                    .ID("Questionnaries")
+                    //.DataSource(Model.List_Id_Oprostnik_Model)
+                    //.DataSource(new JS("ISNPS.load_dataSource('/GroupQuestionnarei_API/Oprostnik_Id_List','Questionnaries','TagBox')"))
+                    .DataSource(d => d.Mvc().Controller("GroupQuestionnarei_API").LoadAction("Oprostnik_Id_List").Key("Oid"))
+                    .ValueExpr("Oid")
+                    .DisplayExpr("Name")
+                    .ShowSelectionControls(true)
+                    .HideSelectedItems(true)
+                    .ApplyValueMode(EditorApplyValueMode.Instantly)
+                    .OnValueChanged("onTagBoxValueChanged")
+                    .ShowClearButton(true)
+                    @*                     .OnContentReady("test") *@
+                    )
+            }
+        </div>
+    </div>
+    <div class="modal-footer">
+        @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+        @(Html.DevExtreme()
+        .Button()
+        .Icon("save")
+        .Disabled(isDisabled)
+        .Type(ButtonType.Success)
+        .Text(Localization.Save)
+            .OnClick("function(e) { onSubmitGroupClick(e, \"" + @Questionnaries_List + "\"); }")
+        .ID(Model.Oid.ToString()))
+    </div>
+</form>
+<style>
+    .hide-before::before {
+        display: none !important;
+    }
+</style>

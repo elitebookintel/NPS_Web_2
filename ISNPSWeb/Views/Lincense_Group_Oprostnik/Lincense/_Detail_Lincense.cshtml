@@ -1,0 +1,108 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.Get_Lincense
+
+@model Lincense_Get.LicenseViewModel
+@{
+    string formattedDateTime;
+    string DeviceName;
+    string LicenseStatus;
+
+    if (Model.License != null)
+    {
+        formattedDateTime = Model.License.LicenseActivated?.ToString("dd.MM.yyyy HH:mm");
+        DeviceName = Model.License.DeviceName;
+        LicenseStatus =(int)Model.License.LicenseStatus == 0 ? Localization.NotActivated : (int)Model.License.LicenseStatus == 1 ? Localization.Activated : (int)Model.License.LicenseStatus == 2 ? Localization.Deactivated : "";
+    }
+    else
+    {
+        formattedDateTime = "";
+        DeviceName = "";
+        LicenseStatus = "";
+    }
+}
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        var nameGroup = "@(ViewBag.Name_Group ?? "null")";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+        if (nameGroup === "null") {
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-12">
+            @(Html.DevExtreme()
+                .TextBoxFor(m => m.License.DeviceName)
+                .LabelMode(EditorLabelMode.Floating)
+                .Label(Localization.Device_Name)
+                .Visible(true).ReadOnly(true))
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @(Html.DevExtreme()
+                .TextBoxFor(m => m.License.ActivationCode)
+                .LabelMode(EditorLabelMode.Floating)
+                .Label(Localization.ActivationCode)
+                .Visible(true).ReadOnly(true))
+        </div>
+        <div class="col-md-6">
+            @(
+                Html.DevExtreme().TextBoxFor(m => m.License.LicenseStatus)
+                .LabelMode(EditorLabelMode.Floating)
+                .Label(Localization.Status)
+                .Visible(true)
+                .ReadOnly(true)
+                .Value(LicenseStatus))
+        </div>
+        <div class="col-md-6">
+            @{
+                if (Model.License==null || Model.License.LicenseActivated == DateTime.MinValue)
+                {
+                    @(Html.DevExtreme()
+                    .TextBox()
+                    .LabelMode(EditorLabelMode.Floating)
+                    .Label(Localization.LincenseActivated)
+                    .Visible(true)
+                    .ReadOnly(true).Value(""))
+                }
+                else
+                {
+                    @(Html.DevExtreme()
+                    .TextBox()
+                    .LabelMode(EditorLabelMode.Floating)
+                    .Label(Localization.LincenseActivated)
+                    .Visible(true)
+                    .ReadOnly(true).Value(@formattedDateTime))
+                }
+            }
+        </div>
+        <div class="col-md-6">
+            @(Html.DevExtreme()
+                .TextBox()
+                .LabelMode(EditorLabelMode.Floating)
+                .Label(Localization.Name_Group)
+                .Visible(true)
+                .ReadOnly(true)
+                .Value(ViewBag.Name_Group).ID("Name_Group"))
+        </div>
+    </div>
+    <div class="modal-footer">
+        @(Html.DevExtreme()
+            .Button()
+            .Icon("revert")
+            .Type(ButtonType.Normal)
+            .Text(Localization.Cancel)
+            .OnClick("closeModalClick"))
+    </div>
+</div>

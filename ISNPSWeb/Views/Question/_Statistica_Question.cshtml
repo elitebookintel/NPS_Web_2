@@ -1,0 +1,250 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using ISNPSWeb.Models.Lincense_Group_Oprostnik
+@using Domain
+@model List_QuestionViewModel
+
+@{
+    var cultureCookie = ViewBag.CultureCookie;
+    var lang = Enums.EnUiLanguage.RU;
+    if (cultureCookie =="ru") lang= Enums.EnUiLanguage.RU;
+    if (cultureCookie =="ro") lang= Enums.EnUiLanguage.RO;
+    if (cultureCookie =="en") lang= Enums.EnUiLanguage.EN;
+    bool isDisabled = false;
+    QuestionViewModel Question = null;
+    int? QuestionId;
+    Enums.GradingType? gradingType;
+    DateTime? dateTime;
+    if (Model.ErrorCode ==EnErrorCode.NoError)
+    {
+        QuestionId = ViewBag.QuestionId;
+        gradingType = Model.Questions[0].GradingType;
+        dateTime = ViewBag.Data_Creat;
+
+    }
+    else
+    {
+        QuestionId = null;
+        gradingType = null;
+        dateTime = null;
+        isDisabled = true;
+    }
+    if (Model.Questions.Count()>0)
+    {
+         Question = Model.Questions[0];
+    }
+}
+
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+<script src="~/js/Pages/Question/Statistica_Question.js" asp-append-version="true"></script>
+<div id="language" hidden>@ViewBag.Language</div>
+<div id="name_question" hidden>@Newtonsoft.Json.JsonConvert.SerializeObject(Model.Questions[0].Question)</div>
+
+<div id="QuestionId" style="visibility: hidden;">@QuestionId </div>
+<div>
+    <div class="row">
+        <div id="Col_Language_EN_Oprostnik" class="col-auto">
+            <div id="Language_EN_Oprostnik">
+                @{
+                    var globalLanguage = lang;
+                    ButtonType buttontype;
+                    bool isDisabledbutton = false;
+                    var name_oprostnik = "";
+                    if (Question!=null && Question.Question != null && Question.Question.ContainsKey(Enums.EnUiLanguage.EN) && Question.Question[Enums.EnUiLanguage.EN] != "")
+                    {
+                        buttontype = ButtonType.Success;
+                        name_oprostnik = Question.Question[Enums.EnUiLanguage.EN];
+                    }
+                    else
+                    {
+                        buttontype = ButtonType.Normal;
+                    }
+                    if (globalLanguage == Enums.EnUiLanguage.EN) isDisabledbutton = true;
+                }
+                @(Html.DevExtreme().Button()
+                    .ID("Language_EN")
+                    .Text("EN")
+                    .Icon("/assets/images/Flag_EN.png")
+                    .Type(buttontype)
+                    .StylingMode(ButtonStylingMode.Contained)
+                    .OnClick("function(e) { onLanguage_Statistica_Question(e, \"" + Enums.EnUiLanguage.EN.ToString() + "\", \"" + lang + "\", \"" + name_oprostnik+ "\"); }")
+                    .Visible(true)
+                    .Disabled(isDisabledbutton)
+                    )            
+            </div>
+        </div>
+        <div id="Col_Language_RU_Oprostnik" class="col-auto">
+            <div id="Language_RU_Oprostnik">
+                @{
+                    isDisabledbutton = false;
+                    name_oprostnik = "";
+                    if (Question!=null && Question.Question != null && Question.Question.ContainsKey(Enums.EnUiLanguage.RU) && Question.Question[Enums.EnUiLanguage.RU] != "")
+                    {
+                        buttontype = ButtonType.Success;
+                        name_oprostnik = Question.Question[Enums.EnUiLanguage.RU];
+                    }
+                    else
+                    {
+                        buttontype = ButtonType.Normal;
+                    }
+                    if (globalLanguage == Enums.EnUiLanguage.RU) isDisabledbutton = true;
+                }
+                @(Html.DevExtreme().Button()
+                    .ID("Language_RU")
+                    .Text("RU")
+                    .Icon("/assets/images/Flag_RU.png")
+                    .Type(buttontype)
+                    .StylingMode(ButtonStylingMode.Contained)
+                    .OnClick("function(e) { onLanguage_Statistica_Question(e, \"" + Enums.EnUiLanguage.RU.ToString() + "\", \"" + lang + "\", \"" +  name_oprostnik+ "\"); }")
+                    .Visible(true)
+                    .Disabled(isDisabledbutton)
+                    )
+            </div>
+        </div>
+        <div id="Col_Language_RO_Oprostnik" class="col-auto">
+            <div id="Language_RO_Oprostnik">
+                @{
+                    isDisabledbutton = false;
+                    name_oprostnik = "";
+                    if (Question!=null && Question.Question != null && Question.Question.ContainsKey(Enums.EnUiLanguage.RO)&& Question.Question[Enums.EnUiLanguage.RO] != "")
+                    {
+                        name_oprostnik = Question.Question[Enums.EnUiLanguage.RO];
+                        buttontype = ButtonType.Success;
+                    }
+                    else
+                    {
+                        buttontype = ButtonType.Normal;
+                    }
+                    if (globalLanguage == Enums.EnUiLanguage.RO) isDisabledbutton = true;
+                }
+                @(Html.DevExtreme().Button()
+                    .ID("Language_RO")
+                    .Text("RO")
+                    .Icon("/assets/images/Flag_RO.png")
+                    .Type(buttontype)
+                    .StylingMode(ButtonStylingMode.Contained)
+                    .OnClick("function(e) { onLanguage_Statistica_Question(e, \"" + Enums.EnUiLanguage.RO.ToString() + "\", \"" + lang + "\", \"" +  name_oprostnik + "\"); }")
+                    .Visible(true)
+                    .Disabled(isDisabledbutton)
+                    )
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@(Html.DevExtreme().TextBox().InputAttr(@QuestionId).Value(@QuestionId.ToString())
+        .LabelMode(EditorLabelMode.Floating)
+        .Label("Id")
+        .Name("Id")
+        .ID("Id_")
+        .Visible(false))
+
+@(Html.DevExtreme().TextBox().InputAttr(@gradingType).Value(@gradingType.ToString())
+        .LabelMode(EditorLabelMode.Floating)
+        .Label("GradingType")
+        .Name("GradingType")
+        .ID("GradingType_")
+        .Visible(false))
+
+<div id="Language">
+    @(Html.DevExtreme().TextBox()
+        .ID("Language_Question_div")
+        .Name("Language_Question")
+        .InputAttr(new { id = "Language_Question" })
+        .LabelMode(EditorLabelMode.Floating)
+        .Label("Language_Question")
+        .Visible(false)
+        .ReadOnly(false)
+        .Value(lang.ToString()))
+</div>
+<div id="Name_Oprostnik">
+    @if (Model != null && Question!=null &&  Question.Question != null && Question.Question.ContainsKey(lang))
+    {
+        name_oprostnik = Question.Question[lang];
+    }
+
+    @(Html.DevExtreme().TextBox()
+        .LabelMode(EditorLabelMode.Floating)
+        .Label("Name")
+        .ID("Name")
+        .Name("Name")
+        .Visible(false)
+        .Value(name_oprostnik))
+</div>
+<div id="Modal_Statistica_Question">
+    <h3 id="text_statistika_form">@Localization.Text_Statistica_Data</h3>
+    <div class="row">
+        <div class="col-6">
+            @(Html.DevExtreme().DateBox()
+                .InputAttr("aria-label", "Data_start")
+                .Type(DateBoxType.Date)
+                .Value(dateTime)
+                .Name("Data_start")
+                .Min(dateTime ?? default)
+                // .Max(DateTime.Now)
+                .ID("Data_start")
+                .Visible(true)
+                .ReadOnly(false)
+                .DisplayFormat("dd/MM/yyyy")
+                .OnValueChanged("onStartDateChanged")
+                .OnInitialized("onStartDateInitialized")
+                )
+        </div>
+        <div class="col-6">
+            @(Html.DevExtreme().DateBox()
+                .InputAttr("aria-label", "Data_end")
+                .Type(DateBoxType.Date)
+                .Value(DateTime.Now)
+                .Min(dateTime?? default)
+                .DisplayFormat("dd/MM/yyyy")
+                // .Max(DateTime.Now)
+                .Name("Data_end")
+                .ID("Data_end")
+                .Visible(true)
+                .ReadOnly(false)
+                .OnValueChanged("onEndDateChanged")
+                .OnInitialized("onEndDateInitialized")
+                )
+        </div>
+    </div>
+
+    <div class="modal-footer modal-footer-statistica" style="padding-right:0px;">
+        @(Html.DevExtreme()
+        .Button()
+        .ID("Button_form")
+        .Disabled(isDisabled)
+        .Type(ButtonType.Success)
+        .Text(Localization.Apply_data_Statistica)
+        .OnClick("Data_Statistica"))
+    </div>
+    @{
+        var name_question = ViewBag.Name_Queston;
+        if (ViewBag.Name_Queston =="")
+        {
+            name_question = Localization.Question_Missing_Lang;
+        }
+    }
+    <div style="display: flex;">
+        <h3 id="text_statistika" style="margin-right: 10px;">@Localization.Text_Statistica_Question </h3>
+        <h3 id="h3_question_name" style="text-decoration: underline double;">@name_question</h3>
+    </div>
+
+    <div id="Char_div">
+    </div>
+    <div class="modal-footer modal-footer-statistica">
+        @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+    </div>
+</div>  

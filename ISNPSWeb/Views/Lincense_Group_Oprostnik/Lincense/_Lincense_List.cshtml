@@ -1,0 +1,166 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.Get_List_Lincense;
+ @model List_Lincense_Get.Lincense_View_Model_List
+@{
+    ViewData["Title"] = "Lincese";
+}
+
+
+<script src="~/js/Pages/Lincense_Group_Oprostnik/Lincense/Lincense_List_Expres.js" asp-append-version="true"></script>
+<div class="card">
+    <div class="card-body">
+        <!-- DataGrid Start -->
+        <div>
+            @(Html.DevExtreme().DataGrid<List_Lincense_Get.Lincense_View_Model_List>()
+                .ID("gridLincese")
+                .ShowBorders(true)
+                .ShowRowLines(true)
+                //.DataSource(Model.Lincense_List)
+                .DataSource(new JS("ISNPS.load_dataSource('/Lincense_API/Get_Lincesne_List', 'gridLincese','DataGrid')"))
+                @*  .OnInitialized("function() {ISNPS.load_dataSource('/Lincense_API/Get_Lincesne_List', 'gridLincese')}") *@
+                @*                 .DataSource(d => d
+            .WebApi()
+            .Controller("Lincense_API")
+            .Key("Oid")
+            .LoadAction("Get_Lincesne_List")) *@
+                .FilterPanel(i => i.Visible(true))
+                .FilterRow(i => i.Visible(true))
+                .HeaderFilter(i => i.Visible(true))
+                .ColumnChooser(columnChooser =>
+                {
+                    columnChooser.Enabled(true);
+
+                })
+                .HoverStateEnabled(true)
+                .Scrolling(scrolling =>
+                {
+                    scrolling.RowRenderingMode(GridRowRenderingMode.Standard);
+                })
+
+                .Selection(selection =>
+                {
+                    selection.Mode(SelectionMode.Single);
+                })
+
+                .Grouping(grouping =>
+                {
+                    grouping.AutoExpandAll(true);
+                })
+                .GroupPanel(groupPanel =>
+                {
+                    groupPanel.Visible(true);
+                })
+                .AllowColumnResizing(true)
+                .AllowColumnReordering(true)
+
+                .SearchPanel(searchPanel =>
+                {
+                    searchPanel.Visible(true);
+                    searchPanel.Width(240);
+                    searchPanel.Placeholder("Search");
+                })
+                .LoadPanel(loadPanel =>
+                {
+                    loadPanel.Enabled(true);
+                })
+                .Paging(paging =>
+                {
+                    paging.PageSize(15);
+                })
+                .Pager(pager =>
+                {
+                    pager.Visible(true);
+                    pager.ShowInfo(true);
+                    pager.DisplayMode(GridPagerDisplayMode.Adaptive);
+                    pager.ShowPageSizeSelector(true);
+                    pager.ShowNavigationButtons(true);
+                    pager.AllowedPageSizes(new int[] { 15, 25, 50 });
+                })
+                .Columns(c =>
+                {
+                    c.Add().DataField("DeviceName").Name("DeviceName").Caption(Localization.Device_Name);
+                    c.Add().DataField("GroupQuestionnarie_Name").Name("GroupQuestionnarie_Name").Caption(Localization.Name_Group);
+                    c.Add().DataField("LicenseActivated").Name("LicenseActivated").Caption(Localization.LincenseActivated).DataType(GridColumnDataType.Date).Format("dd.MM.yyyy HH:mm");
+                    c.Add().DataField("LicenseStatus").Caption("LicenseStatus").Caption(Localization.Status)
+                    .Lookup(i =>
+                    {
+                        i.DataSource(new object[]
+                    {
+            new { id =0, text = Localization.NotActivated },
+            new { id =1, text = Localization.Activated },
+            new { id =2, text = Localization.Deactivated }
+                    });
+                        i.ValueExpr("id");
+                        i.DisplayExpr("text");
+                    });
+                    c.Add().Name("contextBtns").Type(GridCommandColumnType.Buttons)
+                    .Buttons(buttons =>
+                    {
+                        buttons.Add().Name("edit").Icon("edit").OnClick("editButtonClicked").Visible(true);
+                        buttons.Add().Name("details").Icon("file").OnClick("infoButtonClicked").Visible(true);
+                        buttons.Add().Name("delit").Icon("remove").OnClick("deletButtonClicked").Visible(true);
+                        buttons.Add().Name("Context").Icon("overflow").OnClick("onClickContextMenuBtn").Visible(true);
+                    });
+                })
+                .Toolbar(toolbar =>
+                {
+                    toolbar.Items(items =>
+                    {
+                        items.Add()
+                    .Location(ToolbarItemLocation.Before)
+                    .Widget(widget =>
+                    widget.Button()
+                    .Text(Localization.Add_Lincense)
+                    .Icon("plus")
+                    .ID("Add_item")
+                    .StylingMode(ButtonStylingMode.Contained)
+                    .Type(ButtonType.Success)
+                    .OnClick("addLincenseButtonClicked")
+                    .Visible(true)
+                    );
+                        items.Add()
+                    .Location(ToolbarItemLocation.After)
+                    .LocateInMenu(ToolbarItemLocateInMenuMode.Auto)
+                    .Widget(widget => widget.Button()
+                    .Icon("refresh")
+                    .OnClick("refresh_Lincese_List")
+                    .Visible(true)
+                    );
+
+                        items.Add()
+                    .Location(ToolbarItemLocation.After)
+                    .LocateInMenu(ToolbarItemLocateInMenuMode.Auto)
+                    .Name("searchPanel")
+                    .Text(Localization.SearchPanel);
+
+                    });
+                })
+                .OnContentReady("created_data_grid")
+                )
+        </div>
+
+        @(
+            Html.DevExtreme().ContextMenu()
+            .ID("ActiveContext")
+            .Target("null")
+            .OnItemClick("onContextMenuItemClick")
+            .Position(p => p.At(HorizontalAlignment.Left, VerticalAlignment.Bottom))
+            .DataSource(d => d.Array()
+            .Data(new List<object>{ new { id = "active", text = Localization.Activate },
+        new{ id = "releaseLicense", text = Localization.ReleaseLicense },
+        })))
+        @(
+            Html.DevExtreme().ContextMenu()
+            .ID("DisabledContext")
+            .Target("null")
+            .OnItemClick("onContextMenuItemClick")
+            .Position(p => p.At(HorizontalAlignment.Left, VerticalAlignment.Bottom))
+            .DataSource(d => d.Array()
+            .Data(new List<object>{ new { id = "disable", text = Localization.Disable },
+        new{ id = "releaseLicense", text = Localization.ReleaseLicense },
+        })))
+        <!-- DataGrid End -->
+    </div>
+</div>
+

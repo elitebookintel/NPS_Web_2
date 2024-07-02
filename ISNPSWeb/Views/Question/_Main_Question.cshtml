@@ -1,0 +1,24 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.Get_List_Question
+@using Newtonsoft.Json;
+ @model List_Question_Get.QuestionViewModel
+@{
+    ViewData["Title"] = "Question";
+}
+<script asp-append-version="true">
+    // $(document).ready(function () {
+    //     ISNPS.DrawPartialView("/Question/Get_Oprostnik/" + @ViewBag.ID, "Oprsotnik_info")
+    // })
+
+    $(document).ready(function () {
+        ISNPS.DrawPartialView("/Question/Question_List/" + @ViewBag.ID, "QuestionList")
+    })
+</script>
+
+<div class="card">
+    <div class="card-body">
+@*         <div id="Oprsotnik_info"></div> *@
+        <div id="QuestionList"></div>
+    </div>
+</div>

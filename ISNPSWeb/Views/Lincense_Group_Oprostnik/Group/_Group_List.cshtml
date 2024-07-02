@@ -1,0 +1,126 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.Get_List_GroupQuestionnaire
+
+@model List_GroupQuestionnaire_Get.View_List_Model_GroupQuestionnaire
+
+@{
+    ViewData["Title"] = "Group";
+}
+
+<script src="~/js/Pages/Lincense_Group_Oprostnik/Group/Group_List_Express.js" asp-append-version="true"></script>
+<div class="card">
+    <div class="card-body">
+        <!-- DataGrid Start -->
+        <div>
+            @(
+                Html.DevExtreme().DataGrid<List_GroupQuestionnaire_Get.View_GroupQuestionnarieViewModel>()
+                .ID("gridGroup")
+                .ShowBorders(true)
+                .ShowRowLines(true)
+                // .DataSource(Model.View_GroupQuestionnaries)
+                .DataSource(new JS("ISNPS.load_dataSource('/GroupQuestionnarei_API/Group_List','gridGroup','DataGrid')"))
+                // .OnInitialized("function() {ISNPS.load_dataSource('/GroupQuestionnarei_API/Group_List', 'gridGroup')}")
+               @*  .DataSource(d => d
+                .WebApi()
+                .Controller("GroupQuestionnarei_API")
+                .Key("Id")
+                .LoadAction("Group_List")) *@
+                .FilterPanel(i => i.Visible(true))
+                .FilterRow(i => i.Visible(true))
+                .HeaderFilter(i => i.Visible(true))
+                .ColumnChooser(columnChooser =>
+                {
+                    columnChooser.Enabled(true);
+                })
+                .HoverStateEnabled(true)
+                .Scrolling(scrolling =>
+                {
+                    scrolling.RowRenderingMode(GridRowRenderingMode.Standard);
+                })
+                .Selection(selection =>
+                {
+                    selection.Mode(SelectionMode.Single);
+                })
+                .Grouping(grouping =>
+                {
+                    grouping.AutoExpandAll(true);
+                })
+                .GroupPanel(groupPanel =>
+                {
+                    groupPanel.Visible(true);
+                })
+                .AllowColumnResizing(true)
+                .AllowColumnReordering(true)
+                .SearchPanel(searchPanel =>
+                {
+                    searchPanel.Visible(true);
+                    searchPanel.Width(240);
+                    searchPanel.Placeholder("Search");
+                })
+                .LoadPanel(loadPanel =>
+                {
+                    loadPanel.Enabled(true);
+                })
+                .Paging(paging =>
+                {
+                    paging.PageSize(15);
+                })
+                .Pager(pager =>
+                {
+                    pager.Visible(true);
+                    pager.ShowInfo(true);
+                    pager.DisplayMode(GridPagerDisplayMode.Adaptive);
+                    pager.ShowPageSizeSelector(true);
+                    pager.ShowNavigationButtons(true);
+                    pager.AllowedPageSizes(new int[] { 15, 25, 50 });
+                })
+                .Columns(c =>
+                {
+                    c.AddFor(i => i.Id).DataField("Id").Name("Id").Width(70).Caption("ID");
+                    c.AddFor(i => i.Name).DataField("Name").Name(Localization.Name).Caption(Localization.Name_Group);
+                    c.Add().Name("contextBtns").Type(GridCommandColumnType.Buttons)
+                    .Buttons(buttons =>
+                    {
+                        buttons.Add().Name("edit").Icon("edit").OnClick("editButtonClicked").Visible(true);
+                        buttons.Add().Name("details").Icon("file").OnClick("infoButtonClicked").Visible(true);
+                        buttons.Add().Name("delit").Icon("remove").OnClick("deletButtonClicked").Visible(true);
+                    });
+                })
+                .Toolbar(toolbar =>
+                {
+                    toolbar.Items(items =>
+                    {
+                        items.Add()
+                    .Location(ToolbarItemLocation.Before)
+                    .Widget(widget =>
+                    widget.Button()
+                    .Text(Localization.Add_Group_Questionnaire)
+                    .Icon("plus")
+                    .ID("Add_item")
+                    .StylingMode(ButtonStylingMode.Contained)
+                    .Type(ButtonType.Success)
+                    .OnClick("addGroupButtonClicked")
+                    .Visible(true)
+                    );
+                        items.Add()
+                    .Location(ToolbarItemLocation.After)
+                    .LocateInMenu(ToolbarItemLocateInMenuMode.Auto)
+                    .Widget(widget => widget.Button()
+                    .Icon("refresh")
+                    .OnClick("refresh_Group_List")
+                    .Visible(true)
+                    );
+                        items.Add()
+                    .Location(ToolbarItemLocation.After)
+                    .LocateInMenu(ToolbarItemLocateInMenuMode.Auto)
+                    .Name("searchPanel")
+                    .Text(Localization.SearchPanel);
+                    });
+                })
+                .OnContentReady("created_data_grid")
+                )
+        </div>
+        <!-- DataGrid End -->
+    </div>
+</div>

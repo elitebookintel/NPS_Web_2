@@ -1,0 +1,135 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Application.Requests.Queries.Get_Lincense
+@using Domain;
+
+@model Lincense_Get.LicenseViewModel
+@{
+    string formattedDateTime;
+    string DeviceName;
+    string LicenseStatus;
+
+    if (Model.License != null)
+    {
+        formattedDateTime = Model.License.LicenseActivated?.ToString("dd.MM.yyyy HH:mm");
+        DeviceName = Model.License.DeviceName;
+        LicenseStatus =(int)Model.License.LicenseStatus == 0 ? Localization.NotActivated : (int)Model.License.LicenseStatus == 1 ? Localization.Activated : (int)Model.License.LicenseStatus == 2 ?Localization.Deactivated: "";
+    }
+    else
+    {
+        formattedDateTime = "";
+        DeviceName = "";
+        LicenseStatus = "";
+    }
+}
+
+<script src="~/js/Pages/Lincense_Group_Oprostnik/Lincense/Delet_Lincense.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    (function () {
+        var errorCode = "@Model.ErrorCode";
+        var errorMessage = "@Model.ErrorMessage";
+        var nameGroup = "@(ViewBag.Name_Group ?? "null")";
+        if (errorCode !== "NoError") {
+             if (errorCode === "Access_denied" || errorCode === "Invalid_token") {
+                window.location.href = '/Account/Logout/';
+            }
+            ShowToast('warning', errorMessage);
+        }
+        if (nameGroup === "null") {
+            ShowToast('warning', errorMessage);
+        }
+    })();
+</script>
+
+
+@(Html.DevExtreme().TextBoxFor(m => m.License.Oid).LabelMode(EditorLabelMode.Floating).Visible(false).ReadOnly(true).ID("Oid"))
+<form name="deletlincense" asp-controller="Lincense_API" asp-action="Delet_Lincesne" mehod="GET" autocomplete="off">
+    <div class="container">
+        <div id="Modal_Delet_License">
+            <style asp-append-version="true">
+                h3 {
+                    display: inline;
+                }
+            </style>
+            <h3>@Localization.Text_Delet_License &nbsp</h3>
+            <h3 style="text-decoration: underline double"> @DeviceName</h3>
+            @(
+                Html.DevExtreme().TextBox()
+                .LabelMode(EditorLabelMode.Floating)
+                .Label(Localization.Name_Lincense)
+                .Name("License_Oid_input")
+                .ID("License_Oid_input")
+                .Visible(true)
+                .ReadOnly(false)
+                .Value("")
+                .Placeholder(Localization.Oid_Lincense))
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @(Html.DevExtreme()
+                    .TextBoxFor(m => m.License.DeviceName)
+                    .LabelMode(EditorLabelMode.Floating)
+                    .Label(Localization.Device_Name)
+                    .Visible(true)
+                    .ReadOnly(true).ID("Device_Name"))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                @(Html.DevExtreme()
+                    .TextBoxFor(m => m.License.ActivationCode)
+                    .LabelMode(EditorLabelMode.Floating)
+                    .Label(Localization.ActivationCode)
+                    .Visible(true).ReadOnly(true))
+            </div>
+            <div class="col-md-6">
+                @(
+                    Html.DevExtreme().TextBoxFor(m => m.License.LicenseStatus)
+                    .LabelMode(EditorLabelMode.Floating)
+                    .Label(Localization.Status)
+                    .Visible(true)
+                    .ReadOnly(true)
+                    .Value(LicenseStatus))
+            </div>
+            <div class="col-md-6">
+                @{
+                    if (Model.License ==null || Model.License.LicenseActivated == DateTime.MinValue)
+                    {
+                        @(Html.DevExtreme()
+                        .TextBox()
+                        .LabelMode(EditorLabelMode.Floating)
+                        .Label(Localization.LincenseActivated)
+                        .Visible(true)
+                        .ReadOnly(true).Value(""))
+                    }
+                    else
+                    {
+                        @(Html.DevExtreme()
+                        .TextBox()
+                        .LabelMode(EditorLabelMode.Floating)
+                        .Label(Localization.LincenseActivated)
+                        .Visible(true)
+                        .ReadOnly(true).Value(@formattedDateTime))
+                    }
+                }
+            </div>
+            <div class="col-md-6">
+                @(Html.DevExtreme()
+                    .TextBox()
+                    .LabelMode(EditorLabelMode.Floating)
+                    .Label(Localization.Name_Group)
+                    .Visible(true)
+                    .ReadOnly(true)
+                    .Value(ViewBag.Name_Group).ID("Name_Group"))
+            </div>
+        </div>
+
+
+
+        <div class="modal-footer">
+            @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+            @(Html.DevExtreme().Button().Icon("trash").Type(ButtonType.Danger).Text(Localization.Delet).OnClick("onDeleteClick").ID("submit_button"))
+        </div>
+        <script src="~/js/Pages/Question/Delet_Question.js" asp-append-version="true"></script>
+    </div>
+</form>

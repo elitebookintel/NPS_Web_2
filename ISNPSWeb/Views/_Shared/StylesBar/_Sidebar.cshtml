@@ -1,0 +1,51 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+@using Microsoft.AspNetCore.Mvc.Localization
+
+
+@* <link rel="stylesheet" href="assets/css/icons.min.css" asp-append-version="true"> *@
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu" style="background-color: #fff;">
+
+    <!-- LOGO -->
+
+
+    <div class="d-flex flex-logo" style="background-color: #fff;">
+        <a href=@Url.Action("Index", "Home") class="logo logo-dark">
+            <div class="navbar-brand-box" style="background-color: #fff; height:70px;"></div>
+        </a>
+    </div>
+    <div class='spacer-box'></div>
+    <button type="button" class="btn btn-sm px-2 font-size-16 header-item waves-effect vertical-menu-btn">
+        <i class="fa fa-fw fa-bars"></i>
+    </button>
+
+    <div data-simplebar class="sidebar-menu-scroll" style="background-color:#fff;">
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+
+                <li>
+                    <a id="Lincense" href="@Url.Action("Index", "Lincense")">
+                        <i class="mdi mdi-license"></i>
+                        <span>@Localization.License</span>
+                    </a>
+                </li>
+                <li>
+                    <a id="Lincense" href="@Url.Action("Index", "GroupQuestionnarei")">
+                        <i class="mdi mdi-group"></i>
+                        <span>@Localization.Group_Questionnaire</span>
+                    </a>
+                </li>
+                <li>
+                    <a id="Lincense" href="@Url.Action("Index", "Oprostnik")">
+                        <i class="mdi mdi-file-question"></i>
+                        <span>@Localization.Questionnaire</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->

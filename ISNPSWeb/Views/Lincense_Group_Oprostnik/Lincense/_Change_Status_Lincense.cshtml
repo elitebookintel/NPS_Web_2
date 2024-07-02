@@ -1,0 +1,69 @@
+﻿@using DevExtreme.AspNet.Mvc
+@using DevExtreme.AspNet.Mvc.Builders
+
+<script src="~/js/Pages/Lincense_Group_Oprostnik/Lincense/Change_Status_License.js" asp-append-version="true"></script>
+<div id="Modal_Delet_Question">
+    @{
+        string LicenseStatus = "";
+        string License_button= "";
+        var type_button = ButtonType.Success;
+        string icon = "";
+        if (ViewBag.LicenseStatus == "1")
+        { 
+            LicenseStatus = Localization.Activate;
+            License_button = Localization.Activate;
+            icon = "download";
+        }
+        if (ViewBag.LicenseStatus == "2") { 
+            LicenseStatus = Localization.Disable;
+            License_button = Localization.Disable;
+            type_button = ButtonType.Danger;
+            icon = "upload";
+        }
+        if (ViewBag.LicenseStatus == "-1") {
+            LicenseStatus = Localization.ReleaseLicense;
+            License_button= Localization.Release_button;
+            type_button = ButtonType.Danger;
+            icon = "upload";
+        }
+    }
+    @(Html.DevExtreme().TextBox()
+        .Name("LicenseStatus")
+        .ID("LicenseStatus")
+        .Visible(false)
+        .ReadOnly(false)
+        .Value(ViewBag.LicenseStatus))
+    <style asp-append-version="true">
+        h3 {
+            display: inline;
+        }
+    </style>
+
+    <h3>@Localization.Text_Change_Status_Lincense  &nbsp</h3>
+    <h3 id="Change_Status" style="text-decoration: underline double">@ViewBag.Divace_Name</h3>
+    @* <h3> &nbsp @LicenseStatus </h3>*@
+
+
+    @(Html.DevExtreme().TextBox()
+        .LabelMode(EditorLabelMode.Floating)
+        .Name("Oid")
+        .ID("Oid")
+        .Visible(false)
+        .ReadOnly(false)
+        .Placeholder(Localization.Oid_Lincense)
+        .Value(ViewBag.Id))
+        <div style="margin-top:6px">
+   @*  @(Html.DevExtreme().TextBox()
+        .LabelMode(EditorLabelMode.Floating)
+        .Name("Device_Name")
+        .ID("Device_Name")
+        .Visible(true)
+        .ReadOnly(false)
+        .Placeholder(Localization.Device_Name)) *@
+        
+    </div>
+    <div class="modal-footer">
+        @(Html.DevExtreme().Button().Icon("revert").Type(ButtonType.Normal).Text(Localization.Cancel).OnClick("closeModalClick"))
+        @(Html.DevExtreme().Button().Icon(icon).Type(type_button).Text(License_button).OnClick("function() { onChange_Status(" + ViewBag.LicenseStatus + ", \"" + ViewBag.Id +"\", \""+ViewBag.Divace_Name + "\"); }").ID("submit_button"))
+    </div>
+</div>
