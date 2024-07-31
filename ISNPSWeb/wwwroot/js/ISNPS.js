@@ -123,7 +123,6 @@ var ISNPS = {
         if (modal != null) {
             $(modal).html(result);
         }
-
     },
     ajaxPOST: function (url, form, modal, gridId, not_form, url_get) {
         

@@ -18,14 +18,7 @@
                 .ID("gridGroup")
                 .ShowBorders(true)
                 .ShowRowLines(true)
-                // .DataSource(Model.View_GroupQuestionnaries)
                 .DataSource(new JS("ISNPS.load_dataSource('/GroupQuestionnarei_API/Group_List','gridGroup','DataGrid')"))
-                // .OnInitialized("function() {ISNPS.load_dataSource('/GroupQuestionnarei_API/Group_List', 'gridGroup')}")
-               @*  .DataSource(d => d
-                .WebApi()
-                .Controller("GroupQuestionnarei_API")
-                .Key("Id")
-                .LoadAction("Group_List")) *@
                 .FilterPanel(i => i.Visible(true))
                 .FilterRow(i => i.Visible(true))
                 .HeaderFilter(i => i.Visible(true))
